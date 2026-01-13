@@ -62,9 +62,6 @@
       "style": {
         "noDefaultExport": {
           "level": "error"
-        },
-        "useComponentExportOnlyModules": {
-          "level": "error"
         }
       },
       "correctness": {
