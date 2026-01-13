@@ -135,6 +135,9 @@
     }
     body {
         font-family: "Figtree Variable", sans-serif;
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground relative;
+    }
+    .root {
+      isolation: isolate;
     }
 }
