@@ -4,8 +4,14 @@ import { routeTree } from './routeTree.gen';
 import './index.css';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { createRoot } from 'react-dom/client';
+import { queryClient } from './app/query-client';
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  context: {
+    queryClient,
+  },
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
@@ -19,7 +25,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <AppProviders>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} context={{ queryClient }} />
       </AppProviders>
     </StrictMode>
   );

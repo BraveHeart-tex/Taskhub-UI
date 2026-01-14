@@ -1,13 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { getMe } from '@/features/auth/api';
 
 export const Route = createFileRoute('/')({
-  component: Index,
-});
+  beforeLoad: async () => {
+    const user = await getMe();
 
-function Index() {
-  return (
-    <div className='p-2'>
-      <h3>Welcome Home!</h3>
-    </div>
-  );
-}
+    if (user) {
+      throw redirect({ to: '/boards' });
+    }
+    throw redirect({ to: '/login' });
+  },
+});

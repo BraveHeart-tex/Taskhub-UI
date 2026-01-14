@@ -1,24 +1,21 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import type { QueryClient } from '@tanstack/react-query';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { ModeToggle } from '@/components/mode-toggle';
 
-const RootLayout = () => (
-  <>
-    <div className='p-2 flex gap-2 items-center justify-between'>
-      <div className='flex items-center gap-2'>
-        <Link to='/' className='[&.active]:font-bold'>
-          Home
-        </Link>
-        <Link to='/about' className='[&.active]:font-bold'>
-          About
-        </Link>
-      </div>
-      <ModeToggle />
-    </div>
-    <hr />
-    <Outlet />
-    <TanStackRouterDevtools />
-  </>
-);
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
+  component: RootLayout,
+});
 
-export const Route = createRootRoute({ component: RootLayout });
+function RootLayout() {
+  return (
+    <>
+      <Outlet />
+
+      {import.meta.env.DEV && (
+        <TanStackRouterDevtools position='bottom-right' />
+      )}
+    </>
+  );
+}
