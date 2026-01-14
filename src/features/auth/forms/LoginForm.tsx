@@ -49,9 +49,9 @@ export const LoginForm = () => {
   return (
     <Card className='w-full sm:max-w-md'>
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
+        <CardTitle>Login</CardTitle>
         <CardDescription>
-          Enter your information to get started.
+          Enter your credentials to access your account.
         </CardDescription>
       </CardHeader>
       <CardContent>
