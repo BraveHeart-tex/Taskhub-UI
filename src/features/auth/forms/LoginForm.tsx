@@ -1,5 +1,6 @@
 import { useForm } from '@tanstack/react-form';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
+import { Loader2 } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,9 +18,13 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useLogin } from '../mutations';
 import { loginInputSchema } from '../schemas';
 
 export const LoginForm = () => {
+  const loginMutation = useLogin();
+  const router = useRouter();
+
   const form = useForm({
     defaultValues: {
       email: '',
@@ -29,7 +34,12 @@ export const LoginForm = () => {
       onChange: loginInputSchema,
     },
     onSubmit: async ({ value }) => {
-      alert(JSON.stringify(value, null, 2));
+      try {
+        const res = await loginMutation.mutateAsync(value);
+        console.log(res);
+
+        await router.navigate({ to: '/' });
+      } catch {}
     },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(
@@ -109,16 +119,26 @@ export const LoginForm = () => {
             </form.Field>
           </FieldGroup>
         </form>
+        {loginMutation.error && (
+          <p className='text-destructive text-sm'>Invalid email or password</p>
+        )}
       </CardContent>
       <CardFooter className='flex flex-col gap-4'>
-        <Button type='submit' form='login-form' className='w-full'>
-          Login
+        <Button
+          type='submit'
+          form='login-form'
+          className='w-full'
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending && <Loader2 className='animate-spin' />}
+          {loginMutation.isPending ? 'Logging in...' : 'Login'}
         </Button>
         <p className='text-center text-sm text-muted-foreground'>
           {"Don't have an account? "}
           <Link
             to='/signup'
             className='underline underline-offset-4 hover:text-foreground'
+            disabled={loginMutation.isPending}
           >
             Sign up
           </Link>

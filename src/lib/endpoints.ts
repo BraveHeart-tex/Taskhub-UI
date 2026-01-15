@@ -1,8 +1,8 @@
 export const endpoints = {
   auth: {
-    me: '/api/auth/me',
-    login: '/api/auth/login',
-    logout: '/api/auth/logout',
-    signup: '/api/auth/signup',
+    me: `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
+    login: `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+    logout: `${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`,
+    signup: `${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`,
   },
 };

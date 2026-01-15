@@ -132,4 +132,7 @@
   [role="button"]:not([disabled]) {
     cursor: pointer;
   }
+  button > svg {
+    @apply size-4;
+  }
 }
