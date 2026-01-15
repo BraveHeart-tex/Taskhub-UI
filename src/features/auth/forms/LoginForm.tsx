@@ -35,9 +35,7 @@ export const LoginForm = () => {
     },
     onSubmit: async ({ value }) => {
       try {
-        const res = await loginMutation.mutateAsync(value);
-        console.log(res);
-
+        await loginMutation.mutateAsync(value);
         await router.navigate({ to: '/' });
       } catch {}
     },

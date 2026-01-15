@@ -1,5 +1,6 @@
 import { useForm } from '@tanstack/react-form';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
+import { Loader2 } from 'lucide-react';
 import type { FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,19 +19,29 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useSignup } from '../mutations';
 import { signupInputSchema } from '../schemas';
 
 export const SignupForm = () => {
+  const signupMutate = useSignup();
+  const router = useRouter();
+
   const form = useForm({
     defaultValues: {
       email: '',
       password: '',
+      fullName: '',
     },
     validators: {
       onChange: signupInputSchema,
     },
     onSubmit: async ({ value }) => {
-      alert(JSON.stringify(value, null, 2));
+      try {
+        await signupMutate.mutateAsync(value);
+        await router.navigate({
+          to: '/',
+        });
+      } catch {}
     },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(
@@ -58,6 +69,31 @@ export const SignupForm = () => {
       <CardContent>
         <form id='signup-form' onSubmit={onSubmit}>
           <FieldGroup>
+            <form.Field name='fullName'>
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type='text'
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder='John Doe'
+                      autoComplete='name'
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
             <form.Field name='email'>
               {(field) => {
                 const isInvalid =
@@ -116,14 +152,21 @@ export const SignupForm = () => {
         </form>
       </CardContent>
       <CardFooter className='flex flex-col gap-4'>
-        <Button type='submit' form='signup-form' className='w-full'>
-          Create account
+        <Button
+          type='submit'
+          form='signup-form'
+          className='w-full'
+          disabled={signupMutate.isPending}
+        >
+          {signupMutate.isPending && <Loader2 className='animate-spin' />}
+          {signupMutate.isPending ? 'Creating account...' : 'Create account'}
         </Button>
         <p className='text-center text-sm text-muted-foreground'>
           {'Already have an account? '}
           <Link
             to='/login'
             className='underline underline-offset-4 hover:text-foreground'
+            disabled={signupMutate.isPending}
           >
             Login
           </Link>

@@ -1,16 +1,12 @@
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http-client';
-import { userSchema } from './schemas';
+import { type SignupInput, userSchema } from './schemas';
 
 export async function login(input: { email: string; password: string }) {
   return httpClient.post<void>(endpoints.auth.login, input);
 }
 
-export async function signup(input: {
-  email: string;
-  password: string;
-  name: string;
-}) {
+export async function signup(input: SignupInput) {
   return httpClient.post<void>(endpoints.auth.signup, input);
 }
 
