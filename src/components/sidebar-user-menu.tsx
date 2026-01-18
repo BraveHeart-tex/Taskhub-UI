@@ -41,7 +41,7 @@ export function SidebarUserMenu({
   const handleLogout = async () => {
     const result = await logoutMutation.mutateAsync();
     if (result.ok) {
-      await router.navigate({ to: '/login' });
+      await router.invalidate();
     }
   };
 
