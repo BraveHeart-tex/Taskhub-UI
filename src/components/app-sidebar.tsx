@@ -12,10 +12,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { NavUser } from './sidebar-user-menu';
+import { SidebarUserMenu } from './sidebar-user-menu';
 
-// Menu items.
-const items = [
+const mockMenuItems = [
   {
     title: 'Home',
     url: '#',
@@ -43,6 +42,12 @@ const items = [
   },
 ];
 
+const mockUserData = {
+  avatar: 'https://example.com/avatar.jpg',
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+};
+
 export function AppSidebar() {
   return (
     <Sidebar collapsible='icon'>
@@ -51,7 +56,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {mockMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     render={
@@ -68,13 +73,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser
-          user={{
-            avatar: 'https://example.com/avatar.jpg',
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-          }}
-        />
+        <SidebarUserMenu user={mockUserData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
