@@ -34,10 +34,10 @@ export const LoginForm = () => {
       onChange: loginInputSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        await loginMutation.mutateAsync(value);
+      const result = await loginMutation.mutateAsync(value);
+      if (result.ok) {
         await router.navigate({ to: '/' });
-      } catch {}
+      }
     },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(
@@ -117,9 +117,12 @@ export const LoginForm = () => {
             </form.Field>
           </FieldGroup>
         </form>
-        {loginMutation.error && (
-          <p className='text-destructive text-sm'>Invalid email or password</p>
-        )}
+        {loginMutation.data?.ok === false &&
+          loginMutation.data.error.type === 'InvalidCredentials' && (
+            <p className='mt-2 text-destructive text-sm'>
+              Invalid email or password
+            </p>
+          )}
       </CardContent>
       <CardFooter className='flex flex-col gap-4'>
         <Button

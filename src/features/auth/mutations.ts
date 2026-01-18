@@ -7,8 +7,10 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: login,
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.auth.me() });
+    onSuccess: (result) => {
+      if (result.ok) {
+        qc.invalidateQueries({ queryKey: queryKeys.auth.me() });
+      }
     },
   });
 }
@@ -18,8 +20,10 @@ export function useSignup() {
 
   return useMutation({
     mutationFn: signup,
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.auth.me() });
+    onSuccess: (result) => {
+      if (result.ok) {
+        qc.invalidateQueries({ queryKey: queryKeys.auth.me() });
+      }
     },
   });
 }
@@ -29,8 +33,10 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: logout,
-    onSuccess: () => {
-      qc.removeQueries({ queryKey: queryKeys.auth.me() });
+    onSuccess: (result) => {
+      if (result.ok) {
+        qc.removeQueries({ queryKey: queryKeys.auth.me() });
+      }
     },
   });
 }
