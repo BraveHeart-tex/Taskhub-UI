@@ -1,14 +1,18 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import { getMe } from '@/features/auth/api';
+import { getMe } from '@/features/auth/auth.api';
 
 export const Route = createFileRoute('/_app')({
   beforeLoad: async () => {
-    const user = await getMe();
-    if (!user) {
+    const result = await getMe();
+    if (!result.ok) {
       throw redirect({ to: '/login' });
     }
 
-    return { user };
+    if (result.value === null) {
+      throw redirect({ to: '/login' });
+    }
+
+    return { user: result.value };
   },
   component: AppLayout,
 });

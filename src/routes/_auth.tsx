@@ -1,22 +1,12 @@
-import {
-  createFileRoute,
-  isRedirect,
-  Outlet,
-  redirect,
-} from '@tanstack/react-router';
-import { getMe } from '@/features/auth/api';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import { getMe } from '@/features/auth/auth.api';
 
 export const Route = createFileRoute('/_auth')({
   beforeLoad: async () => {
-    try {
-      const user = await getMe();
-      if (user) {
-        throw redirect({ to: '/boards' });
-      }
-    } catch (error) {
-      if (isRedirect(error)) {
-        throw error;
-      }
+    const result = await getMe();
+
+    if (result.ok && result.value !== null) {
+      throw redirect({ to: '/boards' });
     }
   },
   component: AuthLayout,

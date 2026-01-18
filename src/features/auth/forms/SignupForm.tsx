@@ -37,7 +37,9 @@ export const SignupForm = () => {
     },
     onSubmit: async ({ value }) => {
       try {
-        await signupMutate.mutateAsync(value);
+        const result = await signupMutate.mutateAsync(value);
+        console.log(result);
+
         await router.navigate({
           to: '/',
         });

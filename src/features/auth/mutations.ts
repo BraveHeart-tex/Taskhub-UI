@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/query-keys';
-import { login, logout, signup } from './api';
+import { login, logout, signup } from './auth.api';
 
 export function useLogin() {
   const qc = useQueryClient();

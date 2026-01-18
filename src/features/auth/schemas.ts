@@ -18,6 +18,7 @@ export type SignupInput = z.infer<typeof signupInputSchema>;
 export const userSchema = z.object({
   id: z.uuid(),
   email: z.email(),
+  createdAt: z.iso.datetime(),
   fullName: z.string().min(2).max(100),
 });
 
