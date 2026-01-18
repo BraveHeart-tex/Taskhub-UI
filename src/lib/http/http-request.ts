@@ -7,15 +7,16 @@ export async function http<T>(
   input: string,
   init: RequestInit = {}
 ): Promise<Result<T, HttpError>> {
-  const hasBody =
-    (init.body !== null || init.body !== undefined) &&
+  const hasRequestBody =
+    init.body !== null &&
+    init.body !== undefined &&
     typeof init.body === 'string';
 
   const res = await safeFetch(input, {
     ...init,
     credentials: 'include',
     headers: {
-      ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
+      ...(hasRequestBody ? { 'Content-Type': 'application/json' } : {}),
       ...init.headers,
     },
   });
@@ -33,6 +34,21 @@ export async function http<T>(
       status: res.value.status,
       body,
     });
+  }
+
+  const contentType = res.value.headers.get('content-type');
+
+  if (!contentType || !contentType.startsWith('application/json')) {
+    return { ok: true, value: undefined as T };
+  }
+
+  if (res.value.status === 204 || res.value.status === 205) {
+    return { ok: true, value: undefined as T };
+  }
+
+  const contentLength = res.value.headers.get('content-length');
+  if (contentLength === '0') {
+    return { ok: true, value: undefined as T };
   }
 
   return parseJson<T>(res.value);
