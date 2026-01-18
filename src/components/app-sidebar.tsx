@@ -3,6 +3,7 @@ import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { NavUser } from './sidebar-user-menu';
 
 // Menu items.
 const items = [
@@ -65,6 +67,15 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser
+          user={{
+            avatar: 'https://example.com/avatar.jpg',
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+          }}
+        />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
