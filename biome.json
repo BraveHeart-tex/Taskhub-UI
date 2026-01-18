@@ -3,6 +3,7 @@
   "assist": {
     "actions": {
       "source": {
+        "recommended": true,
         "organizeImports": "on"
       }
     },
@@ -58,6 +59,9 @@
       "suspicious": {
         "noUnknownAtRules": {
           "level": "off"
+        },
+        "noConsole": {
+          "level": "error"
         }
       },
       "style": {
