@@ -1,5 +1,4 @@
-'use client';
-
+import { useRouter } from '@tanstack/react-router';
 import {
   BadgeCheck,
   Bell,
@@ -24,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useLogout } from '@/features/auth/mutations';
 
 export function SidebarUserMenu({
   user,
@@ -35,6 +35,15 @@ export function SidebarUserMenu({
   };
 }) {
   const { isMobile } = useSidebar();
+  const logoutMutation = useLogout();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const result = await logoutMutation.mutateAsync();
+    if (result.ok) {
+      await router.navigate({ to: '/login' });
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -101,7 +110,7 @@ export function SidebarUserMenu({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

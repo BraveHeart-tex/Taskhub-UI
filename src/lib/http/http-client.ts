@@ -12,5 +12,6 @@ export const httpClient = {
       method: 'PATCH',
       body: body ? JSON.stringify(body) : undefined,
     }),
-  delete: <T>(url: string) => http<T>(url, { method: 'DELETE' }),
+  delete: <T>(url: string) =>
+    http<T>(url, { method: 'DELETE', body: undefined }),
 };

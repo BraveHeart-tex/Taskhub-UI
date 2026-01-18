@@ -7,11 +7,15 @@ export async function http<T>(
   input: string,
   init: RequestInit = {}
 ): Promise<Result<T, HttpError>> {
+  const hasBody =
+    (init.body !== null || init.body !== undefined) &&
+    typeof init.body === 'string';
+
   const res = await safeFetch(input, {
     ...init,
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
       ...init.headers,
     },
   });
