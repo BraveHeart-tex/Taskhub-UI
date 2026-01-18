@@ -7,12 +7,14 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { SidebarUserMenu } from './sidebar-user-menu';
+import { WorkplaceSwitcher } from './workplace-switcher';
 
 const mockMenuItems = [
   {
@@ -51,6 +53,9 @@ const mockUserData = {
 export function AppSidebar() {
   return (
     <Sidebar collapsible='icon'>
+      <SidebarHeader>
+        <WorkplaceSwitcher />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
