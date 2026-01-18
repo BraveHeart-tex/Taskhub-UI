@@ -18,12 +18,19 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { usePreviousLocation } from '@/lib/hooks/use-previous-location';
+import { showErrorToast } from '@/shared/toast-helpers';
 import { useLogin } from '../mutations';
 import { loginInputSchema } from '../schemas';
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  redirectTo?: string;
+}
+
+export const LoginForm = ({ redirectTo }: LoginFormProps) => {
   const loginMutation = useLogin();
   const router = useRouter();
+  const previousLocation = usePreviousLocation();
 
   const form = useForm({
     defaultValues: {
@@ -35,9 +42,18 @@ export const LoginForm = () => {
     },
     onSubmit: async ({ value }) => {
       const result = await loginMutation.mutateAsync(value);
-      if (result.ok) {
-        await router.navigate({ to: '/' });
+
+      if (!result.ok) {
+        if (result.error.type === 'AlreadyLoggedIn') {
+          await router.navigate({ to: '/' });
+        } else if (result.error.type === 'Unexpected') {
+          showErrorToast('An unexpected error occurred');
+        }
+
+        return;
       }
+
+      await router.navigate({ to: redirectTo ?? previousLocation });
     },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(
