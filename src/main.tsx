@@ -5,6 +5,7 @@ import './index.css';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { createRoot } from 'react-dom/client';
 import { queryClient } from './app/query-client';
+import { Toaster } from './components/ui/sonner.tsx';
 
 const router = createRouter({
   routeTree,
@@ -26,6 +27,7 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <AppProviders>
         <RouterProvider router={router} context={{ queryClient }} />
+        <Toaster closeButton richColors />
       </AppProviders>
     </StrictMode>
   );

@@ -19,6 +19,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { showSuccessToast } from '@/shared/toast-helpers';
 import { useSignup } from '../mutations';
 import { signupInputSchema } from '../schemas';
 
@@ -37,7 +38,7 @@ export const SignupForm = () => {
       onSubmitAsync: async ({ value }) => {
         const result = await signupMutate.mutateAsync(value);
         if (result.ok) {
-          // TODO: show success toast here
+          showSuccessToast('Signed up successfully!');
           await router.navigate({
             to: '/',
           });
