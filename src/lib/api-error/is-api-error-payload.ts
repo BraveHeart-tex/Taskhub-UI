@@ -1,11 +1,14 @@
-import type { ApiErrorPayload } from './api-error-payload';
+import type { ApiErrorResponse } from './api-error-payload';
 
-export function isApiErrorPayload(body: unknown): body is ApiErrorPayload {
+export function isApiErrorPayload(body: unknown): body is ApiErrorResponse {
+  if (typeof body !== 'object' || body === null) return false;
+  if (!('error' in body)) return false;
+
+  // biome-ignore lint/suspicious/noExplicitAny: any is fine here
+  const error = (body as any).error;
   return (
-    typeof body === 'object' &&
-    body !== null &&
-    'code' in body &&
-    // biome-ignore lint/suspicious/noExplicitAny: any is fine here
-    typeof (body as any).code === 'string'
+    typeof error === 'object' &&
+    error !== null &&
+    typeof error.code === 'string'
   );
 }

@@ -34,16 +34,24 @@ export const SignupForm = () => {
     },
     validators: {
       onChange: signupInputSchema,
-    },
-    onSubmit: async ({ value }) => {
-      try {
+      onSubmitAsync: async ({ value }) => {
         const result = await signupMutate.mutateAsync(value);
-        console.log(result);
+        if (result.ok) {
+          // TODO: show success toast here
+          await router.navigate({
+            to: '/',
+          });
+          return;
+        }
 
-        await router.navigate({
-          to: '/',
-        });
-      } catch {}
+        if (result.error.type === 'EmailAlreadyExists') {
+          return {
+            fields: {
+              email: 'Email already exists',
+            },
+          };
+        }
+      },
     },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(

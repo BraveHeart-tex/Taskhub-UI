@@ -175,7 +175,7 @@ function FieldError({
   errors,
   ...props
 }: React.ComponentProps<'div'> & {
-  errors?: Array<{ message?: string } | undefined>;
+  errors?: Array<string | { message?: string } | undefined>;
 }) {
   const content = useMemo(() => {
     if (children) {
@@ -187,19 +187,29 @@ function FieldError({
     }
 
     const uniqueErrors = [
-      ...new Map(errors.map((error) => [error?.message, error])).values(),
+      ...new Map(
+        errors.map((error) => [
+          typeof error === 'string' ? error : error?.message,
+          error,
+        ])
+      ).values(),
     ];
 
     if (uniqueErrors?.length === 1) {
-      return uniqueErrors[0]?.message;
+      const error = uniqueErrors[0];
+      return typeof error === 'string' ? error : error?.message;
     }
 
     return (
       <ul className='ml-4 flex list-disc flex-col gap-1'>
         {uniqueErrors.map(
           (error, index) =>
-            // biome-ignore lint/suspicious/noArrayIndexKey: index is okay here
-            error?.message && <li key={index}>{error.message}</li>
+            (typeof error === 'string' ? error : error?.message) && (
+              // biome-ignore lint/suspicious/noArrayIndexKey: index is okay here
+              <li key={index}>
+                {typeof error === 'string' ? error : error?.message}
+              </li>
+            )
         )}
       </ul>
     );

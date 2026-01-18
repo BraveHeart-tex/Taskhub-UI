@@ -45,7 +45,7 @@ export async function signup(
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
       if (res.error.status === 409 && isApiErrorPayload(res.error.body)) {
-        switch (res.error.body?.code) {
+        switch (res.error.body.error.code) {
           case 'ALREADY_AUTHENTICATED':
             return Err({ type: 'AlreadyLoggedIn' });
 
