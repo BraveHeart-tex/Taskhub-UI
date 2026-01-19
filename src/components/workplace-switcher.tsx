@@ -43,11 +43,11 @@ export function WorkplaceSwitcher() {
                 size='lg'
                 className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
               >
-                <div className='flex items-center justify-center aspect-square border rounded-md p-1'>
+                <div className='border flex aspect-square size-8 items-center justify-center rounded-lg'>
                   <img
                     width={24}
                     height={24}
-                    className='size-6'
+                    className='size-4'
                     src={activeWorkspace.logo}
                     alt={activeWorkspace.name}
                   />
