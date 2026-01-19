@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { SquareDashedKanban } from 'lucide-react';
 
 import {
   Sidebar,
@@ -18,37 +18,11 @@ import { WorkplaceSwitcher } from './workplace-switcher';
 
 const mockMenuItems = [
   {
-    title: 'Home',
+    title: 'Boards',
     url: '#',
-    icon: Home,
-  },
-  {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
+    icon: SquareDashedKanban,
   },
 ];
-
-const mockUserData = {
-  avatar: 'https://example.com/avatar.jpg',
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-};
 
 export function AppSidebar() {
   return (
@@ -58,7 +32,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mockMenuItems.map((item) => (
@@ -78,7 +52,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarUserMenu user={mockUserData} />
+        <SidebarUserMenu />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
