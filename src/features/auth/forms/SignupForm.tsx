@@ -38,7 +38,7 @@ export const SignupForm = () => {
       onSubmitAsync: async ({ value }) => {
         const result = await signupMutate.mutateAsync(value);
         if (result.ok) {
-          showSuccessToast('Signed up successfully!');
+          showSuccessToast('Signed up successfully');
           await router.navigate({
             to: '/',
           });

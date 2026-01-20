@@ -4,9 +4,9 @@ import {
   useLoaderData,
   useRouter,
 } from '@tanstack/react-router';
-import { Button } from '@/components/ui/button';
 import { H3, H4, Muted } from '@/components/ui/typography';
 import { WorkspaceCard } from '@/components/workspace-card';
+import { CreateWorkspaceFormDialog } from '@/features/workspaces/forms/CreateWorkspaceForm';
 import { listWorkspaces } from '@/features/workspaces/workspace.api';
 
 export const Route = createFileRoute('/_app/workspaces/')({
@@ -37,7 +37,7 @@ function RouteComponent() {
           <H3>Workspaces</H3>
           <Muted>Manage your workspaces here</Muted>
         </div>
-        <Button>Create workspace</Button>
+        <CreateWorkspaceFormDialog />
       </div>
       {workspaces.length === 0 ? (
         <div className='flex min-h-50 flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30 text-center'>

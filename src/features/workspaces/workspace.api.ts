@@ -3,6 +3,7 @@ import { httpClient } from '@/lib/http/http-client';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
+  type CreateWorkspaceDto,
   type WorkspaceSummaryDto,
   workspaceListSchema,
 } from './workspace.schemas';
@@ -41,4 +42,23 @@ export async function listWorkspaces(): Promise<
   }
 
   return Ok(parsed.value);
+}
+
+type CreateWorkspaceError =
+  | { type: 'ValidationFailed' }
+  | { type: 'Unexpected' };
+
+export async function createWorkspace(
+  input: CreateWorkspaceDto
+): Promise<Result<WorkspaceSummaryDto, CreateWorkspaceError>> {
+  const res = await httpClient.post<WorkspaceSummaryDto>(
+    endpoints.workspaces.create,
+    input
+  );
+
+  if (!res.ok) {
+    return Err({ type: 'Unexpected' });
+  }
+
+  return Ok(res.value);
 }

@@ -7,5 +7,6 @@ export const endpoints = {
   },
   workspaces: {
     list: `${import.meta.env.VITE_API_BASE_URL}/api/workspaces`,
+    create: `${import.meta.env.VITE_API_BASE_URL}/api/workspaces`,
   },
 };
