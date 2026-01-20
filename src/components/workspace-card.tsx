@@ -4,7 +4,6 @@ import {
   ArrowRight,
   MoreHorizontal,
   Settings,
-  Star,
   Trash2,
   Users,
 } from 'lucide-react';
@@ -18,7 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import type { WorkspaceSummaryDto } from '@/features/workspaces/workspace.schemas';
+import { cn, mockAvatarUrl } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,31 +27,12 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-export interface WorkspaceMember {
-  id: string;
-  fullName: string;
-  email: string;
-  avatarUrl?: string;
-  role: 'owner' | 'admin' | 'member';
-}
-
-export interface WorkspaceCardData {
-  id: string;
-  name: string;
-  ownerId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  members: WorkspaceMember[];
-  isFavorite?: boolean;
-  isCurrentUserOwner?: boolean;
-}
-
 interface WorkspaceCardProps {
-  workspace: WorkspaceCardData;
-  onOpen?: (workspace: WorkspaceCardData) => void;
-  onEdit?: (workspace: WorkspaceCardData) => void;
-  onDelete?: (workspace: WorkspaceCardData) => void;
-  onToggleFavorite?: (workspace: WorkspaceCardData) => void;
+  workspace: WorkspaceSummaryDto;
+  onOpen?: (workspace: WorkspaceSummaryDto) => void;
+  onEdit?: (workspace: WorkspaceSummaryDto) => void;
+  onDelete?: (workspace: WorkspaceSummaryDto) => void;
+  onToggleFavorite?: (workspace: WorkspaceSummaryDto) => void;
   className?: string;
 }
 
@@ -75,11 +56,10 @@ function formatDate(date: Date) {
 export function WorkspaceCard({
   workspace,
   onOpen,
-  onToggleFavorite,
   className,
 }: WorkspaceCardProps) {
-  const displayMembers = workspace.members.slice(0, 4);
-  const remainingMembers = workspace.members.length - displayMembers.length;
+  const displayMembers = workspace.membersPreview.slice(0, 4);
+  const remainingMembers = workspace.memberCount - displayMembers.length;
 
   return (
     <Card className={cn('border', className)}>
@@ -95,13 +75,13 @@ export function WorkspaceCard({
             <div>
               <CardTitle className='text-base'>{workspace.name}</CardTitle>
               <CardDescription className='text-xs'>
-                Created {formatDate(workspace.createdAt)}
+                Created {formatDate(new Date(workspace.createdAt))}
               </CardDescription>
             </div>
           </div>
 
           <div className='flex items-center gap-1'>
-            <Button
+            {/*<Button
               variant='ghost'
               size='icon'
               onClick={() => onToggleFavorite?.(workspace)}
@@ -109,7 +89,7 @@ export function WorkspaceCard({
               <Star
                 className={cn('size-4', workspace.isFavorite && 'fill-current')}
               />
-            </Button>
+            </Button>*/}
 
             <DropdownMenu>
               <DropdownMenuTrigger
@@ -152,16 +132,17 @@ export function WorkspaceCard({
         <div className='flex items-center gap-2 text-sm text-muted-foreground'>
           <Users className='size-4' />
           <span>
-            {workspace.members.length}{' '}
-            {workspace.members.length === 1 ? 'member' : 'members'}
+            {workspace.memberCount}{' '}
+            {workspace.memberCount === 1 ? 'member' : 'members'}
           </span>
         </div>
 
         <div className='flex -space-x-2'>
           {displayMembers.map((member) => (
             <Avatar key={member.id} className='size-8'>
-              {member.avatarUrl && <AvatarImage src={member.avatarUrl} />}
-              <AvatarFallback>{getInitials(member.fullName)}</AvatarFallback>
+              {/* TODO: use the users own avatar once its implemented */}
+              <AvatarImage src={mockAvatarUrl(member.id)} />
+              <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
             </Avatar>
           ))}
 

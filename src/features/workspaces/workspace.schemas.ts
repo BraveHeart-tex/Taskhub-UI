@@ -7,6 +7,13 @@ export const workspaceSummarySchema = z.object({
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
   isCurrentUserOwner: z.boolean(),
+  memberCount: z.number().min(1),
+  membersPreview: z.array(
+    z.object({
+      id: z.uuid(),
+      name: z.string().min(2).max(100),
+    })
+  ),
 });
 
 export const workspaceListSchema = z.array(workspaceSummarySchema);

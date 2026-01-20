@@ -46,20 +46,15 @@ function RouteComponent() {
         </div>
       ) : (
         <ul className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-          {workspaces.map((ws) => (
-            <li key={ws.id} className='h-full'>
+          {workspaces.map((workspace) => (
+            <li key={workspace.id} className='h-full'>
               <WorkspaceCard
-                workspace={{
-                  ...ws,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  members: [],
-                }}
+                workspace={workspace}
                 onOpen={() => {
                   router.navigate({
                     to: '/workspaces/$workspaceId',
                     params: {
-                      workspaceId: ws.id,
+                      workspaceId: workspace.id,
                     },
                   });
                 }}

@@ -16,7 +16,9 @@ type ListWorkspacesError =
 export async function listWorkspaces(): Promise<
   Result<WorkspaceSummaryDto[], ListWorkspacesError>
 > {
-  const res = await httpClient.get<unknown>(endpoints.workspaces.list);
+  const res = await httpClient.get<WorkspaceSummaryDto[]>(
+    endpoints.workspaces.list
+  );
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
