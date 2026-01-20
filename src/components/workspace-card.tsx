@@ -1,6 +1,13 @@
 'use client';
 
-import { Star, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  MoreHorizontal,
+  Settings,
+  Star,
+  Trash2,
+  Users,
+} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +19,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 export interface WorkspaceMember {
   id: string;
@@ -29,6 +43,7 @@ export interface WorkspaceCardData {
   updatedAt: Date;
   members: WorkspaceMember[];
   isFavorite?: boolean;
+  isCurrentUserOwner?: boolean;
 }
 
 interface WorkspaceCardProps {
@@ -95,6 +110,40 @@ export function WorkspaceCard({
                 className={cn('size-4', workspace.isFavorite && 'fill-current')}
               />
             </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='size-8 text-muted-foreground hover:text-foreground'
+                  >
+                    <MoreHorizontal className='size-4' />
+                    <span className='sr-only'>Open menu</span>
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align='end' className='w-48'>
+                <DropdownMenuItem onClick={() => onOpen?.(workspace)}>
+                  <ArrowRight className='mr-2 size-4' />
+                  Open workspace
+                </DropdownMenuItem>
+                {workspace.isCurrentUserOwner && (
+                  <>
+                    <DropdownMenuItem>
+                      <Settings className='mr-2 size-4' />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className='text-destructive focus:text-destructive'>
+                      <Trash2 className='mr-2 size-4' />
+                      Delete
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </CardHeader>
