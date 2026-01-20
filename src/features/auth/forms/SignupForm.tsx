@@ -20,8 +20,8 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { showSuccessToast } from '@/shared/toast-helpers';
-import { useSignup } from '../mutations';
-import { signupInputSchema } from '../schemas';
+import { useSignup } from '../auth.mutations';
+import { signupInputSchema } from '../auth.schemas';
 
 export const SignupForm = () => {
   const signupMutate = useSignup();

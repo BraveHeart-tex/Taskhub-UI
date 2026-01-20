@@ -3,7 +3,7 @@ import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
-import { type SignupInput, type UserDto, userSchema } from './schemas';
+import { type SignupInput, type UserDto, userSchema } from './auth.schemas';
 
 type AuthError =
   | { type: 'InvalidCredentials' }

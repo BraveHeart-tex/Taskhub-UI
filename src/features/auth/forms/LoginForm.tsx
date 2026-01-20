@@ -20,8 +20,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { usePreviousLocation } from '@/lib/hooks/use-previous-location';
 import { showErrorToast } from '@/shared/toast-helpers';
-import { useLogin } from '../mutations';
-import { loginInputSchema } from '../schemas';
+import { useLogin } from '../auth.mutations';
+import { loginInputSchema } from '../auth.schemas';
 
 interface LoginFormProps {
   redirectTo?: string;

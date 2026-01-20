@@ -1,5 +1,5 @@
+import { useParams, useRouter } from '@tanstack/react-router';
 import { ChevronsUpDown, Plus } from 'lucide-react';
-import { useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,23 +15,30 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useWorkspaces } from '@/features/workspaces/workspace.queries';
 
-const mockWorkspaces = [
-  {
-    name: 'Workspace 1',
-    logo: 'https://www.svgrepo.com/show/452076/notion.svg',
-    href: '/workspace1',
-  },
-  {
-    name: 'Workspace 2',
-    logo: 'https://www.svgrepo.com/show/452054/linux.svg',
-    href: '/workspace2',
-  },
-];
+const mockWorkspaceLogo = 'https://www.svgrepo.com/show/452076/notion.svg';
 
 export function WorkplaceSwitcher() {
+  const router = useRouter();
+  const params = useParams({ from: '/_app/workspaces/$workspaceId/' });
+  const { data: workspaces = [], isLoading } = useWorkspaces();
   const { isMobile } = useSidebar();
-  const [activeWorkspace, setActiveWorkspace] = useState(mockWorkspaces[0]);
+
+  const activeWorkspace =
+    workspaces.find((w) => w.id === params.workspaceId) ?? workspaces[0];
+
+  if (isLoading || !activeWorkspace) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size='lg' disabled>
+            Loading…
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
 
   return (
     <SidebarMenu>
@@ -48,7 +55,7 @@ export function WorkplaceSwitcher() {
                     width={24}
                     height={24}
                     className='size-4'
-                    src={activeWorkspace.logo}
+                    src={mockWorkspaceLogo}
                     alt={activeWorkspace.name}
                   />
                 </div>
@@ -70,15 +77,20 @@ export function WorkplaceSwitcher() {
                 Teams
               </DropdownMenuLabel>
             </DropdownMenuGroup>
-            {mockWorkspaces.map((workspace) => (
+            {workspaces.map((workspace) => (
               <DropdownMenuItem
                 key={workspace.name}
                 className='gap-2 p-2'
-                onClick={() => setActiveWorkspace(workspace)}
+                onClick={() => {
+                  router.navigate({
+                    to: '/workspaces/$workspaceId',
+                    params: { workspaceId: workspace.id },
+                  });
+                }}
               >
                 <div className='flex size-6 items-center justify-center rounded-md border'>
                   <img
-                    src={workspace.logo}
+                    src={mockWorkspaceLogo}
                     alt={workspace.name}
                     className='size-3.5 shrink-0'
                   />

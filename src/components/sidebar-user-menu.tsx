@@ -16,7 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { useLogout } from '@/features/auth/mutations';
+import { useLogout } from '@/features/auth/auth.mutations';
 
 const mockAvatar = 'https://robohash.org/avatar.png';
 

@@ -5,7 +5,7 @@ import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
   type WorkspaceSummaryDto,
   workspaceListSchema,
-} from './workspace.schema';
+} from './workspace.schemas';
 
 type ListWorkspacesError =
   | { type: 'Unauthenticated' }
