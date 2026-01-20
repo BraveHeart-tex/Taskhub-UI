@@ -13,15 +13,15 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-export type WorkspaceMember = {
+export interface WorkspaceMember {
   id: string;
   fullName: string;
   email: string;
   avatarUrl?: string;
   role: 'owner' | 'admin' | 'member';
-};
+}
 
-export type WorkspaceCardData = {
+export interface WorkspaceCardData {
   id: string;
   name: string;
   ownerId: string;
@@ -29,7 +29,7 @@ export type WorkspaceCardData = {
   updatedAt: Date;
   members: WorkspaceMember[];
   isFavorite?: boolean;
-};
+}
 
 interface WorkspaceCardProps {
   workspace: WorkspaceCardData;

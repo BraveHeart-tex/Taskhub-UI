@@ -1,4 +1,4 @@
-import { useParams, useRouter } from '@tanstack/react-router';
+import { useMatches, useRouter } from '@tanstack/react-router';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import {
   DropdownMenu,
@@ -21,12 +21,15 @@ const mockWorkspaceLogo = 'https://www.svgrepo.com/show/452076/notion.svg';
 
 export function WorkplaceSwitcher() {
   const router = useRouter();
-  const params = useParams({ from: '/_app/workspaces/$workspaceId/' });
   const { data: workspaces = [], isLoading } = useWorkspaces();
   const { isMobile } = useSidebar();
 
+  const matches = useMatches();
+  const workspaceId = matches.find(
+    (m) => m.routeId === '/_app/workspaces/$workspaceId/'
+  )?.params.workspaceId;
   const activeWorkspace =
-    workspaces.find((w) => w.id === params.workspaceId) ?? workspaces[0];
+    workspaces.find((w) => w.id === workspaceId) ?? workspaces[0];
 
   if (isLoading || !activeWorkspace) {
     return (

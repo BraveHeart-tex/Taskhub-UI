@@ -2,6 +2,7 @@ import {
   createFileRoute,
   redirect,
   useLoaderData,
+  useRouter,
 } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { H3, H4, Muted } from '@/components/ui/typography';
@@ -27,6 +28,7 @@ export const Route = createFileRoute('/_app/workspaces/')({
 
 function RouteComponent() {
   const { workspaces } = useLoaderData({ from: '/_app/workspaces/' });
+  const router = useRouter();
 
   return (
     <div className='flex flex-col gap-6'>
@@ -52,6 +54,14 @@ function RouteComponent() {
                   createdAt: new Date(),
                   updatedAt: new Date(),
                   members: [],
+                }}
+                onOpen={() => {
+                  router.navigate({
+                    to: '/workspaces/$workspaceId',
+                    params: {
+                      workspaceId: ws.id,
+                    },
+                  });
                 }}
               />
             </li>
