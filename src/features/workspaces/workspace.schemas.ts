@@ -1,11 +1,14 @@
 import { z } from 'zod';
 
-export const workspaceSummarySchema = z.object({
+const workspaceSchema = z.object({
   id: z.uuid(),
   name: z.string(),
   ownerId: z.uuid(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
+});
+
+export const workspaceSummarySchema = workspaceSchema.extend({
   isCurrentUserOwner: z.boolean(),
   memberCount: z.number().min(1),
   membersPreview: z.array(
@@ -24,3 +27,12 @@ export const createWorkspaceInputSchema = z.object({
 
 export type CreateWorkspaceDto = z.infer<typeof createWorkspaceInputSchema>;
 export type WorkspaceSummaryDto = z.infer<typeof workspaceSummarySchema>;
+
+export const workspaceContextResponseSchema = workspaceSchema.extend({
+  role: z.enum(['owner', 'member']),
+  isCurrentUserOwner: z.boolean(),
+});
+
+export type WorkspaceContextDto = z.infer<
+  typeof workspaceContextResponseSchema
+>;
