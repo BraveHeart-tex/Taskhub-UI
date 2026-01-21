@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { getWorkspace } from '@/features/workspaces/workspace.api';
 
 export const Route = createFileRoute('/_app/workspaces/$workspaceId/')({
-  loader: async ({ params }) => {
+  beforeLoad: async ({ context, params }) => {
     const result = await getWorkspace(params.workspaceId);
 
     if (!result.ok) {
@@ -10,6 +10,7 @@ export const Route = createFileRoute('/_app/workspaces/$workspaceId/')({
     }
 
     return {
+      ...context,
       workspace: result.value,
     };
   },

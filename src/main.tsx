@@ -9,6 +9,7 @@ import { Toaster } from './components/ui/sonner.tsx';
 
 const router = createRouter({
   routeTree,
+  trailingSlash: 'preserve',
   context: {
     queryClient,
   },

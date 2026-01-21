@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_app')({
       throw redirect({ to: '/login', search: { redirect: location.pathname } });
     }
 
-    return { user: result.value, bora: 123 };
+    return { user: result.value };
   },
   loader: ({ context }) => {
     return { user: context.user };

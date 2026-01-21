@@ -1,5 +1,5 @@
-import { SquareDashedKanban } from 'lucide-react';
-
+import { Link, useRouteContext } from '@tanstack/react-router';
+import { CogIcon, SquareDashedKanban, UsersIcon } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -16,40 +16,69 @@ import {
 import { SidebarUserMenu } from './sidebar-user-menu';
 import { WorkplaceSwitcher } from './workplace-switcher';
 
-const mockMenuItems = [
-  {
-    title: 'Boards',
-    url: '#',
-    icon: SquareDashedKanban,
-  },
-];
-
 export function AppSidebar() {
+  const { workspace } = useRouteContext({
+    from: '/_app/workspaces/$workspaceId/',
+  });
+
   return (
     <Sidebar collapsible='icon'>
       <SidebarHeader>
         <WorkplaceSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {mockMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+        {workspace !== undefined ? (
+          <SidebarGroup>
+            <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
                   <SidebarMenuButton
                     render={
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
+                      <Link
+                        to='/workspaces/$workspaceId/boards'
+                        preload='intent'
+                        params={{ workspaceId: workspace.id }}
+                      >
+                        <SquareDashedKanban />
+                        <span>Boards</span>
+                      </Link>
                     }
                   />
                 </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={
+                      <Link
+                        to='/workspaces/$workspaceId/members'
+                        preload='intent'
+                        params={{ workspaceId: workspace.id }}
+                      >
+                        <UsersIcon />
+                        <span>Members</span>
+                      </Link>
+                    }
+                  />
+                </SidebarMenuItem>
+                {workspace.isCurrentUserOwner && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      render={
+                        <Link
+                          to='/workspaces/$workspaceId/settings'
+                          params={{ workspaceId: workspace.id }}
+                        >
+                          <CogIcon />
+                          <span>Settings</span>
+                        </Link>
+                      }
+                    />
+                  </SidebarMenuItem>
+                )}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ) : null}
       </SidebarContent>
       <SidebarFooter>
         <SidebarUserMenu />
