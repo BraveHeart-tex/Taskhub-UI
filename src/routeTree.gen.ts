@@ -14,7 +14,6 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AppBoardsRouteImport } from './routes/_app/boards'
 import { Route as AppWorkspacesIndexRouteImport } from './routes/_app/workspaces/index'
 import { Route as AppWorkspacesWorkspaceIdIndexRouteImport } from './routes/_app/workspaces/$workspaceId/index'
 import { Route as AppWorkspacesWorkspaceIdSettingsIndexRouteImport } from './routes/_app/workspaces/$workspaceId/settings/index'
@@ -44,11 +43,6 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRoute,
-} as any)
-const AppBoardsRoute = AppBoardsRouteImport.update({
-  id: '/boards',
-  path: '/boards',
-  getParentRoute: () => AppRoute,
 } as any)
 const AppWorkspacesIndexRoute = AppWorkspacesIndexRouteImport.update({
   id: '/workspaces/',
@@ -88,7 +82,6 @@ const AppWorkspacesWorkspaceIdBoardsBoardIdIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/boards': typeof AppBoardsRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/workspaces': typeof AppWorkspacesIndexRoute
@@ -100,7 +93,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/boards': typeof AppBoardsRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/workspaces': typeof AppWorkspacesIndexRoute
@@ -115,7 +107,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_auth': typeof AuthRouteWithChildren
-  '/_app/boards': typeof AppBoardsRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/_app/workspaces/': typeof AppWorkspacesIndexRoute
@@ -129,7 +120,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/boards'
     | '/login'
     | '/signup'
     | '/workspaces'
@@ -141,7 +131,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/boards'
     | '/login'
     | '/signup'
     | '/workspaces'
@@ -155,7 +144,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/_auth'
-    | '/_app/boards'
     | '/_auth/login'
     | '/_auth/signup'
     | '/_app/workspaces/'
@@ -209,13 +197,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_app/boards': {
-      id: '/_app/boards'
-      path: '/boards'
-      fullPath: '/boards'
-      preLoaderRoute: typeof AppBoardsRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/workspaces/': {
       id: '/_app/workspaces/'
       path: '/workspaces'
@@ -262,7 +243,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
-  AppBoardsRoute: typeof AppBoardsRoute
   AppWorkspacesIndexRoute: typeof AppWorkspacesIndexRoute
   AppWorkspacesWorkspaceIdIndexRoute: typeof AppWorkspacesWorkspaceIdIndexRoute
   AppWorkspacesWorkspaceIdBoardsIndexRoute: typeof AppWorkspacesWorkspaceIdBoardsIndexRoute
@@ -272,7 +252,6 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppBoardsRoute: AppBoardsRoute,
   AppWorkspacesIndexRoute: AppWorkspacesIndexRoute,
   AppWorkspacesWorkspaceIdIndexRoute: AppWorkspacesWorkspaceIdIndexRoute,
   AppWorkspacesWorkspaceIdBoardsIndexRoute:

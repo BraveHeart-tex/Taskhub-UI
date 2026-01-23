@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_auth')({
     const result = await getMe();
 
     if (result.ok && result.value !== null) {
-      throw redirect({ to: '/boards' });
+      throw redirect({ to: '/workspaces' });
     }
   },
   component: AuthLayout,

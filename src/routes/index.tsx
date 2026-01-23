@@ -12,6 +12,6 @@ export const Route = createFileRoute('/')({
       throw redirect({ to: '/login', search: { redirect: location.pathname } });
     }
 
-    throw redirect({ to: '/boards' });
+    throw redirect({ to: '/workspaces' });
   },
 });
