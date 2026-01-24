@@ -11,7 +11,7 @@ import {
 } from './workspace.schemas';
 
 type ListWorkspacesError =
-  | { type: 'Unauthenticated' }
+  | { type: 'Unauthroized' }
   | { type: 'ValidationFailed' }
   | { type: 'Unexpected' };
 
@@ -25,7 +25,7 @@ export async function listWorkspaces(): Promise<
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
       if (res.error.status === 401) {
-        return Err({ type: 'Unauthenticated' });
+        return Err({ type: 'Unauthroized' });
       }
     }
 
@@ -68,7 +68,7 @@ export async function createWorkspace(
 }
 
 type GetWorkspaceError =
-  | { type: 'Unauthenticated' }
+  | { type: 'Unauthroized' }
   | { type: 'NotFound' }
   | { type: 'Unexpected' }
   | { type: 'ValidationFailed' };
@@ -83,7 +83,7 @@ export async function getWorkspace(
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
       if (res.error.status === 401) {
-        return Err({ type: 'Unauthenticated' });
+        return Err({ type: 'Unauthroized' });
       }
     }
 
