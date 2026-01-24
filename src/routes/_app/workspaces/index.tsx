@@ -10,7 +10,7 @@ import { CreateWorkspaceFormDialog } from '@/features/workspaces/forms/CreateWor
 import { listWorkspaces } from '@/features/workspaces/workspace.api';
 
 export const Route = createFileRoute('/_app/workspaces/')({
-  component: RouteComponent,
+  component: WorkspacesRoute,
   loader: async () => {
     const result = await listWorkspaces();
 
@@ -26,7 +26,7 @@ export const Route = createFileRoute('/_app/workspaces/')({
   },
 });
 
-function RouteComponent() {
+function WorkspacesRoute() {
   const { workspaces } = useLoaderData({ from: '/_app/workspaces/' });
   const router = useRouter();
 
