@@ -1,30 +1,20 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-
-interface WorkspaceMember {
-  workspaceId: string;
-  user: {
-    id: string;
-    email: string;
-    fullName: string;
-  };
-  role: 'owner' | 'admin' | 'member';
-  joinedAt: string;
-}
+import type { WorkspaceMemberDto } from '../workspace-member.schema';
 
 interface WorkspaceMemberCardProps {
-  member: WorkspaceMember;
+  member: WorkspaceMemberDto;
 }
 
-const roleLabel: Record<WorkspaceMember['role'], string> = {
+const roleLabel: Record<WorkspaceMemberDto['role'], string> = {
   owner: 'Owner',
   admin: 'Admin',
   member: 'Member',
 };
 
 const roleVariant: Record<
-  WorkspaceMember['role'],
+  WorkspaceMemberDto['role'],
   'default' | 'secondary' | 'outline'
 > = {
   owner: 'default',
