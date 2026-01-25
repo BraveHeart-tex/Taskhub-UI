@@ -13,7 +13,7 @@ import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
   listWorkspaceMembersResponseSchema,
   type WorkspaceMember,
-} from './workspace-member.schema';
+} from './workspace-member.schemas';
 
 type ListWorkspaceMembersError =
   | UnauthorizedError

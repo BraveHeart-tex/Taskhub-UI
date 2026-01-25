@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import type { WorkspaceMember } from '../workspace-member.schema';
+import type { WorkspaceMember } from '../workspace-member.schemas';
 
 interface WorkspaceMemberCardProps {
   member: WorkspaceMember;
