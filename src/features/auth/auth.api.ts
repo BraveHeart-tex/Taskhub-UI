@@ -6,6 +6,7 @@ import type {
 import { isApiErrorPayload } from '@/lib/api-error/is-api-error-payload';
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
+import { HttpStatus } from '@/lib/http/http-status';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import { type SignupInput, type UserDto, userSchema } from './auth.schemas';
@@ -27,11 +28,11 @@ export async function login(input: {
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
       switch (res.error.status) {
-        case 400:
+        case HttpStatus.BAD_REQUEST:
           return Err({ type: 'ValidationFailed' });
-        case 401:
+        case HttpStatus.UNAUTHORIZED:
           return Err({ type: 'InvalidCredentials' });
-        case 409:
+        case HttpStatus.CONFLICT:
           return Err({ type: 'AlreadyLoggedIn' });
       }
     }
@@ -49,7 +50,10 @@ export async function signup(
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
-      if (res.error.status === 409 && isApiErrorPayload(res.error.body)) {
+      if (
+        res.error.status === HttpStatus.CONFLICT &&
+        isApiErrorPayload(res.error.body)
+      ) {
         switch (res.error.body.error.code) {
           case 'ALREADY_AUTHENTICATED':
             return Err({ type: 'AlreadyLoggedIn' });
@@ -86,7 +90,7 @@ export async function logout(): Promise<Result<void, AuthError>> {
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
-      if (res.error.status === 401) {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
         return Err({ type: 'Unauthenticated' });
       }
     }
@@ -102,7 +106,7 @@ export async function getMe(): Promise<Result<UserDto | null, AuthError>> {
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
-      if (res.error.status === 401) {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
         return Ok(null);
       }
     }
