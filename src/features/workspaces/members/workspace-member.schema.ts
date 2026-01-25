@@ -4,7 +4,7 @@ import {
   MIN_FULL_NAME_LENGTH,
 } from './workspace-member.constants';
 
-export const workspaceMemberDtoSchema = z.object({
+export const workspaceMemberSchema = z.object({
   workspaceId: z.uuid(),
   user: z.object({
     id: z.uuid(),
@@ -20,7 +20,7 @@ export const workspaceMemberDtoSchema = z.object({
 });
 
 export const listWorkspaceMembersResponseSchema = z.array(
-  workspaceMemberDtoSchema
+  workspaceMemberSchema
 );
 
-export type WorkspaceMemberDto = z.infer<typeof workspaceMemberDtoSchema>;
+export type WorkspaceMember = z.infer<typeof workspaceMemberSchema>;

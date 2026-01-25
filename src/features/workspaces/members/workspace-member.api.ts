@@ -12,7 +12,7 @@ import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
   listWorkspaceMembersResponseSchema,
-  type WorkspaceMemberDto,
+  type WorkspaceMember,
 } from './workspace-member.schema';
 
 type ListWorkspaceMembersError =
@@ -24,8 +24,8 @@ type ListWorkspaceMembersError =
 
 export async function listWorkspaceMembers(
   workspaceId: string
-): Promise<Result<WorkspaceMemberDto[], ListWorkspaceMembersError>> {
-  const res = await httpClient.get<WorkspaceMemberDto[]>(
+): Promise<Result<WorkspaceMember[], ListWorkspaceMembersError>> {
+  const res = await httpClient.get<WorkspaceMember[]>(
     endpoints.workspaces.members.list(workspaceId)
   );
 
