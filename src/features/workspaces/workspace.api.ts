@@ -6,6 +6,7 @@ import type {
 } from '@/lib/api-error/common-api-errors';
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
+import { HttpStatus } from '@/lib/http/http-status';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
@@ -30,7 +31,7 @@ export async function listWorkspaces(): Promise<
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
-      if (res.error.status === 401) {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
         return Err({ type: 'Unauthorized' });
       }
     }
@@ -88,7 +89,7 @@ export async function getWorkspace(
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
-      if (res.error.status === 401) {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
         return Err({ type: 'Unauthorized' });
       }
     }
