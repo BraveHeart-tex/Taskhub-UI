@@ -1,4 +1,16 @@
 import { z } from 'zod';
+import {
+  MAX_BOARD_NAME_LENGTH,
+  MIN_BOARD_NAME_LENGTH,
+} from '../boards/boards.constants';
+import {
+  MAX_USER_NAME_LENGTH,
+  MIN_USER_NAME_LENGTH,
+} from '../users/users.constants';
+import {
+  MAX_WORKSPACE_NAME_LENGTH,
+  MIN_WORKSPACE_NAME_LENGTH,
+} from './workspace.constants';
 
 const workspaceSchema = z.object({
   id: z.uuid(),
@@ -14,7 +26,7 @@ export const workspaceSummarySchema = workspaceSchema.extend({
   membersPreview: z.array(
     z.object({
       id: z.uuid(),
-      name: z.string().min(2).max(100),
+      name: z.string().min(MIN_USER_NAME_LENGTH).max(MAX_USER_NAME_LENGTH),
     })
   ),
 });
@@ -22,7 +34,10 @@ export const workspaceSummarySchema = workspaceSchema.extend({
 export const workspaceListSchema = z.array(workspaceSummarySchema);
 
 export const createWorkspaceInputSchema = z.object({
-  name: z.string().min(2).max(100),
+  name: z
+    .string()
+    .min(MIN_WORKSPACE_NAME_LENGTH)
+    .max(MAX_WORKSPACE_NAME_LENGTH),
 });
 
 export type CreateWorkspaceDto = z.infer<typeof createWorkspaceInputSchema>;
@@ -41,14 +56,14 @@ export const workspaceSummaryWithRecentBoardsSchema = workspaceSchema.extend({
   recentBoards: z.array(
     z.object({
       id: z.uuid(),
-      title: z.string().min(2).max(100),
+      title: z.string().min(MIN_BOARD_NAME_LENGTH).max(MAX_BOARD_NAME_LENGTH),
       updatedAt: z.iso.datetime(),
     })
   ),
   membersPreview: z.array(
     z.object({
       id: z.uuid(),
-      name: z.string().min(2).max(100),
+      name: z.string().min(MIN_USER_NAME_LENGTH).max(MAX_USER_NAME_LENGTH),
       avatarUrl: z.url().nullable().optional(),
     })
   ),
