@@ -1,3 +1,8 @@
+import type {
+  UnauthenticatedError,
+  UnexpectedError,
+  ValidationFailedError,
+} from '@/lib/api-error/common-api-errors';
 import { isApiErrorPayload } from '@/lib/api-error/is-api-error-payload';
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
@@ -6,10 +11,10 @@ import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import { type SignupInput, type UserDto, userSchema } from './auth.schemas';
 
 type AuthError =
+  | UnauthenticatedError
+  | ValidationFailedError
+  | UnexpectedError
   | { type: 'InvalidCredentials' }
-  | { type: 'Unauthenticated' }
-  | { type: 'ValidationFailed' }
-  | { type: 'Unexpected' }
   | { type: 'AlreadyLoggedIn' }
   | { type: 'EmailAlreadyExists' };
 

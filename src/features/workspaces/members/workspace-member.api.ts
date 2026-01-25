@@ -1,3 +1,10 @@
+import type {
+  ForbiddenError,
+  NotFoundError,
+  UnauthorizedError,
+  UnexpectedError,
+  ValidationFailedError,
+} from '@/lib/api-error/common-api-errors';
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
 import { Err, Ok, type Result } from '@/lib/result';
@@ -8,11 +15,11 @@ import {
 } from './workspace-member.schema';
 
 type ListWorkspaceMembersError =
-  | { type: 'Unauthorized' }
-  | { type: 'ValidationFailed' }
-  | { type: 'Unexpected' }
-  | { type: 'NotFound' }
-  | { type: 'Forbidden' };
+  | UnauthorizedError
+  | ValidationFailedError
+  | UnexpectedError
+  | NotFoundError
+  | ForbiddenError;
 
 export async function listWorkspaceMembers(
   workspaceId: string

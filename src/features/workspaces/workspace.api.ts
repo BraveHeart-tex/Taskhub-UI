@@ -1,3 +1,9 @@
+import type {
+  NotFoundError,
+  UnauthorizedError,
+  UnexpectedError,
+  ValidationFailedError,
+} from '@/lib/api-error/common-api-errors';
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
 import { Err, Ok, type Result } from '@/lib/result';
@@ -11,9 +17,9 @@ import {
 } from './workspace.schemas';
 
 type ListWorkspacesError =
-  | { type: 'Unauthroized' }
-  | { type: 'ValidationFailed' }
-  | { type: 'Unexpected' };
+  | UnauthorizedError
+  | ValidationFailedError
+  | UnexpectedError;
 
 export async function listWorkspaces(): Promise<
   Result<WorkspaceSummaryDto[], ListWorkspacesError>
@@ -25,7 +31,7 @@ export async function listWorkspaces(): Promise<
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
       if (res.error.status === 401) {
-        return Err({ type: 'Unauthroized' });
+        return Err({ type: 'Unauthorized' });
       }
     }
 
@@ -68,10 +74,10 @@ export async function createWorkspace(
 }
 
 type GetWorkspaceError =
-  | { type: 'Unauthroized' }
-  | { type: 'NotFound' }
-  | { type: 'Unexpected' }
-  | { type: 'ValidationFailed' };
+  | UnauthorizedError
+  | NotFoundError
+  | UnexpectedError
+  | ValidationFailedError;
 
 export async function getWorkspace(
   workspaceId: string
@@ -83,7 +89,7 @@ export async function getWorkspace(
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
       if (res.error.status === 401) {
-        return Err({ type: 'Unauthroized' });
+        return Err({ type: 'Unauthorized' });
       }
     }
 
