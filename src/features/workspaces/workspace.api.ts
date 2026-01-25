@@ -13,8 +13,10 @@ import {
   type CreateWorkspaceDto,
   type WorkspaceContextDto,
   type WorkspaceSummaryDto,
+  type WorkspaceSummaryWithRecentBoardsDto,
   workspaceContextResponseSchema,
   workspaceListSchema,
+  workspaceSummaryWithRecentBoardsSchema,
 } from './workspace.schemas';
 
 type ListWorkspacesError =
@@ -112,3 +114,45 @@ export async function getWorkspace(
 
   return Ok(parsed.value);
 }
+
+type GetWorkspaceSummaryError =
+  | UnauthorizedError
+  | NotFoundError
+  | UnexpectedError
+  | ValidationFailedError;
+
+export const getWorkspaceSummary = async (
+  workspaceId: string
+): Promise<
+  Result<WorkspaceSummaryWithRecentBoardsDto, GetWorkspaceSummaryError>
+> => {
+  const res = await httpClient.get<WorkspaceSummaryWithRecentBoardsDto>(
+    endpoints.workspaces.summary(workspaceId)
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+    }
+
+    return Err({ type: 'Unexpected' });
+  }
+
+  const parsed = parseWithSchema(
+    workspaceSummaryWithRecentBoardsSchema,
+    res.value,
+    () => {
+      return {
+        type: 'ValidationFailed',
+      } as const;
+    }
+  );
+
+  if (!parsed.ok) {
+    return parsed;
+  }
+
+  return Ok(parsed.value);
+};

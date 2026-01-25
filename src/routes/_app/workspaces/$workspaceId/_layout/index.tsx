@@ -1,5 +1,6 @@
-import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,44 +11,51 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { H2, H4 } from '@/components/ui/typography';
+import { getWorkspaceSummary } from '@/features/workspaces/workspace.api';
 
 export const Route = createFileRoute('/_app/workspaces/$workspaceId/_layout/')({
+  loader: async ({ params }) => {
+    const result = await getWorkspaceSummary(params.workspaceId);
+    if (!result.ok) {
+      throw redirect({ to: '/workspaces' });
+    }
+
+    return {
+      workspaceSummary: result.value,
+    };
+  },
   component: WorkspaceHomePage,
 });
 
-const recentBoards = [
-  { id: 'b1', title: 'Product Roadmap' },
-  { id: 'b2', title: 'Sprint Planning' },
-  { id: 'b3', title: 'Bug Triage' },
-];
-
 function WorkspaceHomePage() {
-  const { workspace } = useLoaderData({
-    from: '/_app/workspaces/$workspaceId/_layout',
-  });
+  const { workspaceSummary } = Route.useLoaderData();
+
   return (
     <div className='space-y-8'>
       <section className='flex items-start justify-between gap-4'>
         <div className='space-y-2'>
           <div className='flex items-center gap-2'>
-            <H2> {workspace.name}</H2>
-            {workspace.isCurrentUserOwner && (
+            <H2> {workspaceSummary.name}</H2>
+            {workspaceSummary.isCurrentUserOwner && (
               <Badge variant='secondary'>Owner</Badge>
             )}
           </div>
 
           <div className='flex items-center gap-3 text-sm text-muted-foreground'>
             <div className='flex -space-x-2'>
-              {/*{workspace.membersPreview.map((member) => (
+              {workspaceSummary.membersPreview.map((member) => (
                 <Avatar key={member.id} className='h-7 w-7 border'>
                   <AvatarImage src={member.avatarUrl ?? undefined} />
                   <AvatarFallback>
                     {member.name.slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-              ))}*/}
+              ))}
             </div>
-            {/*<span>{workspace.memberCount} members</span>*/}
+            <span>
+              {workspaceSummary.memberCount}{' '}
+              {workspaceSummary.memberCount === 1 ? 'member' : 'members'}
+            </span>
           </div>
         </div>
 
@@ -56,7 +64,7 @@ function WorkspaceHomePage() {
             <PlusIcon />
             Create board
           </Button>
-          {workspace.isCurrentUserOwner && (
+          {workspaceSummary.isCurrentUserOwner && (
             <Button variant='outline'>Invite members</Button>
           )}
         </div>
@@ -65,21 +73,23 @@ function WorkspaceHomePage() {
       <section className='space-y-4'>
         <div className='flex items-center justify-between'>
           <H4>Recent Boards</H4>
-          <Button
-            variant='ghost'
-            size='sm'
-            render={
-              <Link
-                to='/workspaces/$workspaceId/boards'
-                params={{ workspaceId: workspace.id }}
-              >
-                View all
-              </Link>
-            }
-          />
+          {workspaceSummary.recentBoards.length > 0 && (
+            <Button
+              variant='ghost'
+              size='sm'
+              render={
+                <Link
+                  to='/workspaces/$workspaceId/boards'
+                  params={{ workspaceId: workspaceSummary.id }}
+                >
+                  View all
+                </Link>
+              }
+            />
+          )}
         </div>
 
-        {recentBoards.length === 0 ? (
+        {workspaceSummary.recentBoards.length === 0 ? (
           <Card className='border-dashed'>
             <CardContent className='flex flex-col items-center justify-center py-12 text-center'>
               <p className='text-sm text-muted-foreground'>
@@ -93,11 +103,11 @@ function WorkspaceHomePage() {
           </Card>
         ) : (
           <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            {recentBoards.map((board) => (
+            {workspaceSummary.recentBoards.map((board) => (
               <Link
                 key={board.id}
                 to='/workspaces/$workspaceId/boards/$boardId'
-                params={{ workspaceId: workspace.id, boardId: board.id }}
+                params={{ workspaceId: workspaceSummary.id, boardId: board.id }}
               >
                 <Card className='hover:bg-muted/50 transition-colors cursor-pointer'>
                   <CardHeader>

@@ -36,3 +36,26 @@ export const workspaceContextResponseSchema = workspaceSchema.extend({
 export type WorkspaceContextDto = z.infer<
   typeof workspaceContextResponseSchema
 >;
+
+export const workspaceSummaryWithRecentBoardsSchema = workspaceSchema.extend({
+  recentBoards: z.array(
+    z.object({
+      id: z.uuid(),
+      title: z.string().min(2).max(100),
+      updatedAt: z.iso.datetime(),
+    })
+  ),
+  membersPreview: z.array(
+    z.object({
+      id: z.uuid(),
+      name: z.string().min(2).max(100),
+      avatarUrl: z.url().nullable().optional(),
+    })
+  ),
+  isCurrentUserOwner: z.boolean(),
+  memberCount: z.number().min(1),
+});
+
+export type WorkspaceSummaryWithRecentBoardsDto = z.infer<
+  typeof workspaceSummaryWithRecentBoardsSchema
+>;
