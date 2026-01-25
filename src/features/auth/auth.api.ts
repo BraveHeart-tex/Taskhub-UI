@@ -9,7 +9,7 @@ import { httpClient } from '@/lib/http/http-client';
 import { HttpStatus } from '@/lib/http/http-status';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
-import { type SignupInput, type UserDto, userSchema } from './auth.schemas';
+import { type SignupInput, type User, userSchema } from './auth.schemas';
 
 type AuthError =
   | UnauthenticatedError
@@ -45,7 +45,7 @@ export async function login(input: {
 
 export async function signup(
   input: SignupInput
-): Promise<Result<UserDto, AuthError>> {
+): Promise<Result<User, AuthError>> {
   const res = await httpClient.post<unknown>(endpoints.auth.signup, input);
 
   if (!res.ok) {
@@ -101,7 +101,7 @@ export async function logout(): Promise<Result<void, AuthError>> {
   return Ok(undefined);
 }
 
-export async function getMe(): Promise<Result<UserDto | null, AuthError>> {
+export async function getMe(): Promise<Result<User | null, AuthError>> {
   const res = await httpClient.get<unknown>(endpoints.auth.me);
 
   if (!res.ok) {

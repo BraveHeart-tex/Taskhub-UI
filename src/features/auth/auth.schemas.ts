@@ -22,4 +22,4 @@ export const userSchema = z.object({
   fullName: z.string().min(2).max(100),
 });
 
-export type UserDto = z.infer<typeof userSchema>;
+export type User = z.infer<typeof userSchema>;
