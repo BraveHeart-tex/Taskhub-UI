@@ -1,5 +1,10 @@
 import { useLoaderData, useRouter } from '@tanstack/react-router';
-import { BadgeCheck, ChevronsUpDown, Cog, LogOut } from 'lucide-react';
+import {
+  BadgeCheckIcon,
+  ChevronsUpDown,
+  LogOutIcon,
+  SettingsIcon,
+} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -81,17 +86,17 @@ export function SidebarUserMenu() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <BadgeCheck />
+                <BadgeCheckIcon />
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Cog />
+                <SettingsIcon />
                 Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
-              <LogOut />
+              <LogOutIcon />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
