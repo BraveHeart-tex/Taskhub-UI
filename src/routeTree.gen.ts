@@ -15,8 +15,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AppWorkspacesIndexRouteImport } from './routes/_app/workspaces/index'
-import { Route as AppWorkspacesWorkspaceIdIndexRouteImport } from './routes/_app/workspaces/$workspaceId/index'
 import { Route as AppWorkspacesWorkspaceIdLayoutRouteImport } from './routes/_app/workspaces/$workspaceId/_layout'
+import { Route as AppWorkspacesWorkspaceIdLayoutIndexRouteImport } from './routes/_app/workspaces/$workspaceId/_layout/index'
 import { Route as AppWorkspacesWorkspaceIdLayoutSettingsIndexRouteImport } from './routes/_app/workspaces/$workspaceId/_layout/settings/index'
 import { Route as AppWorkspacesWorkspaceIdLayoutMembersIndexRouteImport } from './routes/_app/workspaces/$workspaceId/_layout/members/index'
 import { Route as AppWorkspacesWorkspaceIdLayoutBoardsIndexRouteImport } from './routes/_app/workspaces/$workspaceId/_layout/boards/index'
@@ -50,17 +50,17 @@ const AppWorkspacesIndexRoute = AppWorkspacesIndexRouteImport.update({
   path: '/workspaces/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppWorkspacesWorkspaceIdIndexRoute =
-  AppWorkspacesWorkspaceIdIndexRouteImport.update({
-    id: '/workspaces/$workspaceId/',
-    path: '/workspaces/$workspaceId/',
-    getParentRoute: () => AppRoute,
-  } as any)
 const AppWorkspacesWorkspaceIdLayoutRoute =
   AppWorkspacesWorkspaceIdLayoutRouteImport.update({
     id: '/workspaces/$workspaceId/_layout',
     path: '/workspaces/$workspaceId',
     getParentRoute: () => AppRoute,
+  } as any)
+const AppWorkspacesWorkspaceIdLayoutIndexRoute =
+  AppWorkspacesWorkspaceIdLayoutIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppWorkspacesWorkspaceIdLayoutRoute,
   } as any)
 const AppWorkspacesWorkspaceIdLayoutSettingsIndexRoute =
   AppWorkspacesWorkspaceIdLayoutSettingsIndexRouteImport.update({
@@ -92,7 +92,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/workspaces': typeof AppWorkspacesIndexRoute
-  '/workspaces/$workspaceId': typeof AppWorkspacesWorkspaceIdIndexRoute
+  '/workspaces/$workspaceId': typeof AppWorkspacesWorkspaceIdLayoutRouteWithChildren
+  '/workspaces/$workspaceId/': typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
   '/workspaces/$workspaceId/boards': typeof AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute
   '/workspaces/$workspaceId/members': typeof AppWorkspacesWorkspaceIdLayoutMembersIndexRoute
   '/workspaces/$workspaceId/settings': typeof AppWorkspacesWorkspaceIdLayoutSettingsIndexRoute
@@ -103,7 +104,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/workspaces': typeof AppWorkspacesIndexRoute
-  '/workspaces/$workspaceId': typeof AppWorkspacesWorkspaceIdIndexRoute
+  '/workspaces/$workspaceId': typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
   '/workspaces/$workspaceId/boards': typeof AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute
   '/workspaces/$workspaceId/members': typeof AppWorkspacesWorkspaceIdLayoutMembersIndexRoute
   '/workspaces/$workspaceId/settings': typeof AppWorkspacesWorkspaceIdLayoutSettingsIndexRoute
@@ -118,7 +119,7 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/_app/workspaces/': typeof AppWorkspacesIndexRoute
   '/_app/workspaces/$workspaceId/_layout': typeof AppWorkspacesWorkspaceIdLayoutRouteWithChildren
-  '/_app/workspaces/$workspaceId/': typeof AppWorkspacesWorkspaceIdIndexRoute
+  '/_app/workspaces/$workspaceId/_layout/': typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
   '/_app/workspaces/$workspaceId/_layout/boards/': typeof AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute
   '/_app/workspaces/$workspaceId/_layout/members/': typeof AppWorkspacesWorkspaceIdLayoutMembersIndexRoute
   '/_app/workspaces/$workspaceId/_layout/settings/': typeof AppWorkspacesWorkspaceIdLayoutSettingsIndexRoute
@@ -132,6 +133,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/workspaces'
     | '/workspaces/$workspaceId'
+    | '/workspaces/$workspaceId/'
     | '/workspaces/$workspaceId/boards'
     | '/workspaces/$workspaceId/members'
     | '/workspaces/$workspaceId/settings'
@@ -156,7 +158,7 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/_app/workspaces/'
     | '/_app/workspaces/$workspaceId/_layout'
-    | '/_app/workspaces/$workspaceId/'
+    | '/_app/workspaces/$workspaceId/_layout/'
     | '/_app/workspaces/$workspaceId/_layout/boards/'
     | '/_app/workspaces/$workspaceId/_layout/members/'
     | '/_app/workspaces/$workspaceId/_layout/settings/'
@@ -213,19 +215,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWorkspacesIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/workspaces/$workspaceId/': {
-      id: '/_app/workspaces/$workspaceId/'
-      path: '/workspaces/$workspaceId'
-      fullPath: '/workspaces/$workspaceId'
-      preLoaderRoute: typeof AppWorkspacesWorkspaceIdIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/workspaces/$workspaceId/_layout': {
       id: '/_app/workspaces/$workspaceId/_layout'
       path: '/workspaces/$workspaceId'
       fullPath: '/workspaces/$workspaceId'
       preLoaderRoute: typeof AppWorkspacesWorkspaceIdLayoutRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/workspaces/$workspaceId/_layout/': {
+      id: '/_app/workspaces/$workspaceId/_layout/'
+      path: '/'
+      fullPath: '/workspaces/$workspaceId/'
+      preLoaderRoute: typeof AppWorkspacesWorkspaceIdLayoutIndexRouteImport
+      parentRoute: typeof AppWorkspacesWorkspaceIdLayoutRoute
     }
     '/_app/workspaces/$workspaceId/_layout/settings/': {
       id: '/_app/workspaces/$workspaceId/_layout/settings/'
@@ -259,6 +261,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppWorkspacesWorkspaceIdLayoutRouteChildren {
+  AppWorkspacesWorkspaceIdLayoutIndexRoute: typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
   AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute: typeof AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute
   AppWorkspacesWorkspaceIdLayoutMembersIndexRoute: typeof AppWorkspacesWorkspaceIdLayoutMembersIndexRoute
   AppWorkspacesWorkspaceIdLayoutSettingsIndexRoute: typeof AppWorkspacesWorkspaceIdLayoutSettingsIndexRoute
@@ -267,6 +270,8 @@ interface AppWorkspacesWorkspaceIdLayoutRouteChildren {
 
 const AppWorkspacesWorkspaceIdLayoutRouteChildren: AppWorkspacesWorkspaceIdLayoutRouteChildren =
   {
+    AppWorkspacesWorkspaceIdLayoutIndexRoute:
+      AppWorkspacesWorkspaceIdLayoutIndexRoute,
     AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute:
       AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute,
     AppWorkspacesWorkspaceIdLayoutMembersIndexRoute:
@@ -285,14 +290,12 @@ const AppWorkspacesWorkspaceIdLayoutRouteWithChildren =
 interface AppRouteChildren {
   AppWorkspacesIndexRoute: typeof AppWorkspacesIndexRoute
   AppWorkspacesWorkspaceIdLayoutRoute: typeof AppWorkspacesWorkspaceIdLayoutRouteWithChildren
-  AppWorkspacesWorkspaceIdIndexRoute: typeof AppWorkspacesWorkspaceIdIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppWorkspacesIndexRoute: AppWorkspacesIndexRoute,
   AppWorkspacesWorkspaceIdLayoutRoute:
     AppWorkspacesWorkspaceIdLayoutRouteWithChildren,
-  AppWorkspacesWorkspaceIdIndexRoute: AppWorkspacesWorkspaceIdIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
