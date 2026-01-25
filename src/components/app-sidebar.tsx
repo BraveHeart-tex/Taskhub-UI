@@ -5,8 +5,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { WorkplaceSwitcher } from '@/features/workspaces/components/workplace-switcher';
 import { SidebarUserMenu } from './sidebar-user-menu';
-import { WorkplaceSwitcher } from './workplace-switcher';
 
 export function AppSidebar() {
   return (

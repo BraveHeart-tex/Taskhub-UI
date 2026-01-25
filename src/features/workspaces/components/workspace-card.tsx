@@ -17,15 +17,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { WorkspaceSummaryDto } from '@/features/workspaces/workspace.schemas';
-import { cn, mockAvatarUrl } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
+import type { WorkspaceSummaryDto } from '@/features/workspaces/workspace.schemas';
+import { cn, mockAvatarUrl } from '@/lib/utils';
 
 interface WorkspaceCardProps {
   workspace: WorkspaceSummaryDto;

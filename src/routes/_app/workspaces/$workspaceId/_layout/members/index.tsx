@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { H3, Muted } from '@/components/ui/typography';
-import { WorkspaceMemberCard } from '@/components/workspace-member-card';
+import { WorkspaceMemberCard } from '@/features/workspaces/members/components/workspace-member-card';
 import { listWorkspaceMembers } from '@/features/workspaces/members/workspace-member.api';
 
 export const Route = createFileRoute(

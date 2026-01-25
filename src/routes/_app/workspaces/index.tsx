@@ -1,12 +1,11 @@
 import {
   createFileRoute,
-  redirect,
   useLoaderData,
   useRouter,
 } from '@tanstack/react-router';
 import { H3, H4, Muted } from '@/components/ui/typography';
-import { WorkspaceCard } from '@/components/workspace-card';
-import { CreateWorkspaceFormDialog } from '@/features/workspaces/forms/CreateWorkspaceForm';
+import { CreateWorkspaceFormDialog } from '@/features/workspaces/components/create-workspace-form';
+import { WorkspaceCard } from '@/features/workspaces/components/workspace-card';
 import { listWorkspaces } from '@/features/workspaces/workspace.api';
 
 export const Route = createFileRoute('/_app/workspaces/')({
@@ -15,10 +14,6 @@ export const Route = createFileRoute('/_app/workspaces/')({
     const result = await listWorkspaces();
 
     if (!result.ok) {
-      if (result.error.type === 'Unauthenticated') {
-        throw redirect({ to: '/login' });
-      }
-
       return { workspaces: [] };
     }
 
