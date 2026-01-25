@@ -7,6 +7,7 @@ import type {
 } from '@/lib/api-error/common-api-errors';
 import { endpoints } from '@/lib/endpoints';
 import { httpClient } from '@/lib/http/http-client';
+import { HttpStatus } from '@/lib/http/http-status';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
@@ -30,13 +31,13 @@ export async function listWorkspaceMembers(
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {
-      if (res.error.status === 401) {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
         return Err({ type: 'Unauthorized' });
       }
-      if (res.error.status === 403) {
+      if (res.error.status === HttpStatus.FORBIDDEN) {
         return Err({ type: 'Forbidden' });
       }
-      if (res.error.status === 404) {
+      if (res.error.status === HttpStatus.NOT_FOUND) {
         return Err({ type: 'NotFound' });
       }
     }
