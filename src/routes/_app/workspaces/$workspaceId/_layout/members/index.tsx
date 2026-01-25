@@ -6,7 +6,7 @@ import { listWorkspaceMembers } from '@/features/workspaces/members/workspace-me
 export const Route = createFileRoute(
   '/_app/workspaces/$workspaceId/_layout/members/'
 )({
-  component: WorkspaceMembersRoute,
+  component: WorkspaceMembersPage,
   loader: async ({ params }) => {
     const result = await listWorkspaceMembers(params.workspaceId);
     if (!result.ok) {
@@ -30,7 +30,7 @@ export const Route = createFileRoute(
   },
 });
 
-function WorkspaceMembersRoute() {
+function WorkspaceMembersPage() {
   const members = Route.useLoaderData().members;
   return (
     <div className='flex flex-col gap-6'>

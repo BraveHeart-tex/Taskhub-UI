@@ -14,9 +14,9 @@ export const Route = createFileRoute('/_app/workspaces/$workspaceId/')({
       workspace: result.value,
     };
   },
-  component: RouteComponent,
+  component: WorkspaceLayout,
 });
 
-function RouteComponent() {
+function WorkspaceLayout() {
   return <Outlet />;
 }
