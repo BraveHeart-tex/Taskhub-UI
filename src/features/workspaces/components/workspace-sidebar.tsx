@@ -14,6 +14,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import type { WorkspaceContextDto } from '../workspace.schemas';
+import { WorkspaceSwitcher } from './workspace-switcher';
 
 interface WorkspaceSidebarProps {
   workspace: WorkspaceContextDto;
@@ -27,8 +28,7 @@ export function WorkspaceSidebar({ workspace }: WorkspaceSidebarProps) {
   return (
     <Sidebar collapsible='icon'>
       <SidebarHeader>
-        {/* TODO: Add workspace switcher here */}
-        {workspace.name}
+        <WorkspaceSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

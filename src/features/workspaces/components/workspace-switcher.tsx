@@ -1,5 +1,5 @@
-import { useMatches, useRouter } from '@tanstack/react-router';
-import { ChevronsUpDown, Plus } from 'lucide-react';
+import { useLoaderData, useRouter } from '@tanstack/react-router';
+import { CheckIcon, ChevronsUpDown, Plus } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,19 +19,17 @@ import { useWorkspaces } from '@/features/workspaces/workspace.queries';
 
 const mockWorkspaceLogo = 'https://www.svgrepo.com/show/452076/notion.svg';
 
-export function WorkplaceSwitcher() {
+export function WorkspaceSwitcher() {
   const router = useRouter();
-  const { data: workspaces = [], isLoading } = useWorkspaces();
   const { isMobile } = useSidebar();
 
-  const matches = useMatches();
-  const workspaceId = matches.find(
-    (m) => m.routeId === '/_app/workspaces/$workspaceId/'
-  )?.params.workspaceId;
-  const activeWorkspace =
-    workspaces.find((w) => w.id === workspaceId) ?? workspaces[0];
+  const { workspace: activeWorkspace } = useLoaderData({
+    from: '/_app/workspaces/$workspaceId/_layout',
+  });
 
-  if (isLoading || !activeWorkspace) {
+  const { data: workspaces = [], isLoading } = useWorkspaces();
+
+  if (isLoading) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
@@ -77,30 +75,36 @@ export function WorkplaceSwitcher() {
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                Teams
+                Workspaces
               </DropdownMenuLabel>
             </DropdownMenuGroup>
-            {workspaces.map((workspace) => (
-              <DropdownMenuItem
-                key={workspace.name}
-                className='gap-2 p-2'
-                onClick={() => {
-                  router.navigate({
-                    to: '/workspaces/$workspaceId',
-                    params: { workspaceId: workspace.id },
-                  });
-                }}
-              >
-                <div className='flex size-6 items-center justify-center rounded-md border'>
-                  <img
-                    src={mockWorkspaceLogo}
-                    alt={workspace.name}
-                    className='size-3.5 shrink-0'
-                  />
-                </div>
-                {workspace.name}
-              </DropdownMenuItem>
-            ))}
+            {workspaces.map((workspace) => {
+              const isActive = workspace.id === activeWorkspace.id;
+              return (
+                <DropdownMenuItem
+                  key={workspace.id}
+                  className='gap-2 p-2'
+                  onClick={() => {
+                    if (isActive) return;
+
+                    router.navigate({
+                      to: '/workspaces/$workspaceId',
+                      params: { workspaceId: workspace.id },
+                    });
+                  }}
+                >
+                  <div className='flex size-6 items-center justify-center rounded-md border'>
+                    <img
+                      src={mockWorkspaceLogo}
+                      alt={workspace.name}
+                      className='size-3.5 shrink-0'
+                    />
+                  </div>
+                  <span>{workspace.name}</span>
+                  {isActive && <CheckIcon className='size-4 ml-auto' />}
+                </DropdownMenuItem>
+              );
+            })}
             <DropdownMenuSeparator />
             <DropdownMenuItem className='gap-2 p-2'>
               <div className='flex size-6 items-center justify-center rounded-md border bg-transparent'>
