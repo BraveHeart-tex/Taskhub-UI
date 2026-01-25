@@ -1,5 +1,6 @@
-import { Link, useParams } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { Columns3Icon, SettingsIcon, UsersIcon } from 'lucide-react';
+import { SidebarLink } from '@/components/sidebar-link';
 import { SidebarUserMenu } from '@/components/sidebar-user-menu';
 import {
   Sidebar,
@@ -37,26 +38,26 @@ export function WorkspaceSidebar({ workspace }: WorkspaceSidebarProps) {
             <SidebarMenuItem>
               <SidebarMenuButton
                 render={
-                  <Link
+                  <SidebarLink
                     to='/workspaces/$workspaceId/boards'
                     params={{ workspaceId }}
                   >
                     <Columns3Icon />
                     <span>Boards</span>
-                  </Link>
+                  </SidebarLink>
                 }
               />
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 render={
-                  <Link
+                  <SidebarLink
                     to='/workspaces/$workspaceId/members'
                     params={{ workspaceId }}
                   >
                     <UsersIcon />
                     <span>Members</span>
-                  </Link>
+                  </SidebarLink>
                 }
               />
             </SidebarMenuItem>
@@ -64,13 +65,13 @@ export function WorkspaceSidebar({ workspace }: WorkspaceSidebarProps) {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   render={
-                    <Link
+                    <SidebarLink
                       to='/workspaces/$workspaceId/settings'
                       params={{ workspaceId }}
                     >
                       <SettingsIcon />
                       <span>Settings</span>
-                    </Link>
+                    </SidebarLink>
                   }
                 />
               </SidebarMenuItem>
