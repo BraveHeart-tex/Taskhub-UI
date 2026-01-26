@@ -1,9 +1,9 @@
 import { Crown, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { WorkspaceBoardPreview } from '../board.schema';
+import type { BoardPreview } from '../board.schema';
 
 interface WorkspaceBoardPreviewCardProps {
-  board: WorkspaceBoardPreview;
+  board: BoardPreview;
 }
 
 export function WorkspaceBoardPreviewCard({

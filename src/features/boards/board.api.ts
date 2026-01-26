@@ -1,3 +1,4 @@
+import { API_ERROR_CODES, isApiErrorPayload } from '@/lib/api-error';
 import type {
   NotFoundError,
   UnauthenticatedError,
@@ -11,7 +12,9 @@ import { HttpStatus } from '@/lib/http/http-status';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
-  type WorkspaceBoardPreview,
+  type Board,
+  type BoardPreview,
+  boardSchema,
   workspaceBoardPreviewResponseSchema,
 } from './board.schema';
 
@@ -24,8 +27,8 @@ type ListBoardsForWorkspaceError =
 
 export async function listBoardsForWorkspace(
   workspaceId: string
-): Promise<Result<WorkspaceBoardPreview[], ListBoardsForWorkspaceError>> {
-  const res = await httpClient.get<WorkspaceBoardPreview[]>(
+): Promise<Result<BoardPreview[], ListBoardsForWorkspaceError>> {
+  const res = await httpClient.get<BoardPreview[]>(
     endpoints.workspaces.boards.list(workspaceId)
   );
 
@@ -50,4 +53,52 @@ export async function listBoardsForWorkspace(
   }
 
   return Ok(parsed.value);
+}
+
+type CreateBoardError =
+  | UnauthenticatedError
+  | NotFoundError
+  | UnexpectedError
+  | UnauthorizedError
+  | ValidationFailedError
+  | { type: 'DuplicateTitle' };
+
+export async function createBoard(values: {
+  workspaceId: string;
+  title: string;
+}): Promise<Result<Board, CreateBoardError>> {
+  const res = await httpClient.post<Board>(
+    endpoints.workspaces.boards.create(values.workspaceId),
+    { title: values.title }
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (
+        res.error.status === HttpStatus.CONFLICT &&
+        isApiErrorPayload(res.error.body) &&
+        res.error.body.error.code ===
+          API_ERROR_CODES.BOARD.BOARD_TITLE_ALREADY_EXISTS
+      ) {
+        return Err({ type: 'DuplicateTitle' });
+      }
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+    }
+
+    return Err({ type: 'Unexpected' });
+  }
+
+  const parsed = parseWithSchema(
+    boardSchema,
+    res.value,
+    () => ({ type: 'ValidationFailed' }) as const
+  );
+
+  if (!parsed.ok) {
+    return parsed;
+  }
+
+  return Ok(res.value);
 }

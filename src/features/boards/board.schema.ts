@@ -4,7 +4,22 @@ import {
   MIN_BOARD_NAME_LENGTH,
 } from './boards.constants';
 
-export const workspaceBoardPreviewSchema = z.object({
+export const boardSchema = z.object({
+  id: z.uuid(),
+  workspaceId: z.uuid(),
+  title: z.string().min(MIN_BOARD_NAME_LENGTH).max(MAX_BOARD_NAME_LENGTH),
+  createdBy: z.uuid(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+});
+
+export type Board = z.infer<typeof boardSchema>;
+
+export const createBoardInputSchema = z.object({
+  title: z.string().min(MIN_BOARD_NAME_LENGTH).max(MAX_BOARD_NAME_LENGTH),
+});
+
+export const boardPreviewSchema = z.object({
   id: z.uuid(),
   title: z.string().min(MIN_BOARD_NAME_LENGTH).max(MAX_BOARD_NAME_LENGTH),
   workspaceId: z.uuid(),
@@ -14,8 +29,6 @@ export const workspaceBoardPreviewSchema = z.object({
   updatedAt: z.iso.datetime(),
 });
 
-export type WorkspaceBoardPreview = z.infer<typeof workspaceBoardPreviewSchema>;
+export type BoardPreview = z.infer<typeof boardPreviewSchema>;
 
-export const workspaceBoardPreviewResponseSchema = z.array(
-  workspaceBoardPreviewSchema
-);
+export const workspaceBoardPreviewResponseSchema = z.array(boardPreviewSchema);
