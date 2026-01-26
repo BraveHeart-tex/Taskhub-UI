@@ -41,6 +41,7 @@ export const CreateWorkspaceFormDialog = ({
       }
 
       showSuccessToast('Workspace created successfully');
+      onOpenChange(false);
       await router.navigate({
         to: '/workspaces/$workspaceId',
         params: {
