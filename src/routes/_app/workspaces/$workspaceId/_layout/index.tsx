@@ -1,5 +1,6 @@
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
+import { useModalActions } from '@/components/modal-host/modal.store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,6 +30,14 @@ export const Route = createFileRoute('/_app/workspaces/$workspaceId/_layout/')({
 
 function WorkspaceHomePage() {
   const { workspaceSummary } = Route.useLoaderData();
+  const { openModal } = useModalActions();
+
+  const openCreateBoardModal = () => {
+    openModal({
+      type: 'create-board',
+      workspaceId: workspaceSummary.id,
+    });
+  };
 
   return (
     <div className='space-y-8'>
@@ -60,7 +69,7 @@ function WorkspaceHomePage() {
         </div>
 
         <div className='flex gap-2 items-center'>
-          <Button>
+          <Button onClick={openCreateBoardModal}>
             <PlusIcon />
             Create board
           </Button>
@@ -95,7 +104,7 @@ function WorkspaceHomePage() {
               <p className='text-sm text-muted-foreground'>
                 No boards yet in this workspace
               </p>
-              <Button className='mt-4'>
+              <Button className='mt-4' onClick={openCreateBoardModal}>
                 <PlusIcon className='mr-2 h-4 w-4' />
                 Create your first board
               </Button>

@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { Loader2 } from 'lucide-react';
-import { type FormEvent, useState } from 'react';
+import type { FormEvent } from 'react';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,8 +15,15 @@ import { showErrorToast, showSuccessToast } from '@/shared/toast-helpers';
 import { useCreateWorkspace } from '../workspace.mutations';
 import { createWorkspaceInputSchema } from '../workspace.schemas';
 
-export const CreateWorkspaceFormDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface CreateWorkspaceFormDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export const CreateWorkspaceFormDialog = ({
+  open,
+  onOpenChange,
+}: CreateWorkspaceFormDialogProps) => {
   const router = useRouter();
   const createWorkspaceMutate = useCreateWorkspace();
   const form = useForm({
@@ -60,16 +67,15 @@ export const CreateWorkspaceFormDialog = () => {
     <ResponsiveDialog
       title='Create Workspace'
       description='Use the form below to create a new workspace'
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      trigger={<Button>Create workspace</Button>}
+      open={open}
+      onOpenChange={onOpenChange}
       footer={
         <>
           <Button
             type='button'
             variant='secondary'
             onClick={() => {
-              setIsOpen(false);
+              onOpenChange(false);
             }}
             disabled={createWorkspaceMutate.isPending}
           >

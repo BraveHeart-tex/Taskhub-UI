@@ -13,9 +13,5 @@ export const Route = createFileRoute('/_auth')({
 });
 
 function AuthLayout() {
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }

@@ -3,8 +3,9 @@ import {
   useLoaderData,
   useRouter,
 } from '@tanstack/react-router';
+import { useModalActions } from '@/components/modal-host/modal.store';
+import { Button } from '@/components/ui/button';
 import { H3, H4, Muted } from '@/components/ui/typography';
-import { CreateWorkspaceFormDialog } from '@/features/workspaces/components/create-workspace-form';
 import { WorkspaceCard } from '@/features/workspaces/components/workspace-card';
 import { listWorkspaces } from '@/features/workspaces/workspace.api';
 
@@ -23,6 +24,7 @@ export const Route = createFileRoute('/_app/workspaces/')({
 
 function WorkspacesRoute() {
   const { workspaces } = useLoaderData({ from: '/_app/workspaces/' });
+  const { openModal } = useModalActions();
   const router = useRouter();
 
   return (
@@ -32,7 +34,9 @@ function WorkspacesRoute() {
           <H3>Workspaces</H3>
           <Muted>Manage your workspaces here</Muted>
         </div>
-        <CreateWorkspaceFormDialog />
+        <Button onClick={() => openModal({ type: 'create-workspace' })}>
+          Create workspace
+        </Button>
       </div>
       {workspaces.length === 0 ? (
         <div className='flex min-h-50 flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30 text-center'>
