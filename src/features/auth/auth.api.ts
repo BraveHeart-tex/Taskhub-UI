@@ -1,3 +1,4 @@
+import { API_ERROR_CODES } from '@/lib/api-error';
 import type {
   UnauthenticatedError,
   UnexpectedError,
@@ -56,10 +57,10 @@ export async function signup(
         isApiErrorPayload(res.error.body)
       ) {
         switch (res.error.body.error.code) {
-          case 'ALREADY_AUTHENTICATED':
+          case API_ERROR_CODES.AUTH.ALREADY_AUTHENTICATED:
             return Err({ type: 'AlreadyLoggedIn' });
 
-          case 'EMAIL_ALREADY_EXISTS':
+          case API_ERROR_CODES.AUTH.EMAIL_ALREADY_EXISTS:
             return Err({ type: 'EmailAlreadyExists' });
 
           default:
