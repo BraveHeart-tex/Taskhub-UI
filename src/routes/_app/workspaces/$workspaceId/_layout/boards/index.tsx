@@ -42,7 +42,7 @@ function WorkspaceBoardsPage() {
         </div>
 
         <Button onClick={openCreateBoardModal}>
-          <PlusIcon className='mr-2 h-4 w-4' />
+          <PlusIcon />
           Create board
         </Button>
       </div>
