@@ -21,6 +21,14 @@ export const endpoints = {
         `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards`,
       list: (workspaceId: string) =>
         `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards`,
+      get: ({
+        workspaceId,
+        boardId,
+      }: {
+        workspaceId: string;
+        boardId: string;
+      }) =>
+        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}`,
     },
   },
 };

@@ -32,3 +32,17 @@ export const boardPreviewSchema = z.object({
 export type BoardPreview = z.infer<typeof boardPreviewSchema>;
 
 export const workspaceBoardPreviewResponseSchema = z.array(boardPreviewSchema);
+
+export const boardContextSchema = z.object({
+  id: z.uuid(),
+  title: z.string().min(MIN_BOARD_NAME_LENGTH).max(MAX_BOARD_NAME_LENGTH),
+  workspaceId: z.uuid(),
+  myRole: z.enum(['owner', 'member']),
+  permissions: z.object({
+    canEditBoard: z.boolean(),
+    canDeleteBoard: z.boolean(),
+    canManageMembers: z.boolean(),
+  }),
+});
+
+export type BoardContext = z.infer<typeof boardContextSchema>;

@@ -13,7 +13,9 @@ import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
   type Board,
+  type BoardContext,
   type BoardPreview,
+  boardContextSchema,
   boardSchema,
   workspaceBoardPreviewResponseSchema,
 } from './board.schema';
@@ -92,6 +94,49 @@ export async function createBoard(values: {
 
   const parsed = parseWithSchema(
     boardSchema,
+    res.value,
+    () => ({ type: 'ValidationFailed' }) as const
+  );
+
+  if (!parsed.ok) {
+    return parsed;
+  }
+
+  return Ok(res.value);
+}
+
+type GetBoardContextError =
+  | UnauthenticatedError
+  | { type: 'BoardMemberNotFound' }
+  | UnexpectedError
+  | UnauthorizedError
+  | ValidationFailedError;
+
+export async function getBoardContext({
+  workspaceId,
+  boardId,
+}: {
+  workspaceId: string;
+  boardId: string;
+}): Promise<Result<BoardContext, GetBoardContextError>> {
+  const res = await httpClient.get<BoardContext>(
+    endpoints.workspaces.boards.get({ boardId, workspaceId })
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+      if (res.error.status === HttpStatus.NOT_FOUND) {
+        return Err({ type: 'BoardMemberNotFound' });
+      }
+    }
+    return Err({ type: 'Unexpected' });
+  }
+
+  const parsed = parseWithSchema(
+    boardContextSchema,
     res.value,
     () => ({ type: 'ValidationFailed' }) as const
   );
