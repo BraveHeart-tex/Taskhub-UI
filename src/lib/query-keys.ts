@@ -24,13 +24,12 @@ export const queryKeys = {
 
   boards: {
     all: ['boards'] as const,
-
     byId: (boardId: string) =>
       [...queryKeys.boards.all, 'byId', boardId] as const,
-
+    content: (boardId: string) =>
+      [...queryKeys.boards.all, 'content', boardId] as const,
     members: (boardId: string) =>
       [...queryKeys.boards.byId(boardId), 'members'] as const,
-
     lists: (boardId: string) =>
       [...queryKeys.boards.byId(boardId), 'lists'] as const,
   },

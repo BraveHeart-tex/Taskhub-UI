@@ -1,3 +1,5 @@
+import type { BoardRouteParams } from '@/features/boards/board.types';
+
 export const endpoints = {
   auth: {
     me: `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
@@ -19,15 +21,11 @@ export const endpoints = {
     boards: {
       create: (workspaceId: string) =>
         `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards`,
+      content: ({ workspaceId, boardId }: BoardRouteParams) =>
+        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}/content`,
       list: (workspaceId: string) =>
         `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards`,
-      get: ({
-        workspaceId,
-        boardId,
-      }: {
-        workspaceId: string;
-        boardId: string;
-      }) =>
+      get: ({ workspaceId, boardId }: BoardRouteParams) =>
         `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}`,
     },
   },

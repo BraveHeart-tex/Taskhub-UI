@@ -46,3 +46,36 @@ export const boardContextSchema = z.object({
 });
 
 export type BoardContext = z.infer<typeof boardContextSchema>;
+
+export const boardContentSchema = z.object({
+  boardId: z.string(),
+  lists: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      position: z.string(),
+      cards: z.array(
+        z.object({
+          id: z.string(),
+          listId: z.string(),
+          title: z.string(),
+          description: z.string().nullable(),
+          position: z.string(),
+          createdBy: z.string(),
+          createdAt: z.iso.datetime(),
+          updatedAt: z.iso.datetime(),
+        })
+      ),
+    })
+  ),
+  users: z.record(
+    z.string(),
+    z.object({
+      id: z.string(),
+      fullName: z.string(),
+      avatarUrl: z.string().nullable(),
+    })
+  ),
+});
+
+export type BoardContent = z.infer<typeof boardContentSchema>;

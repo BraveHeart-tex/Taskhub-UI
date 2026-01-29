@@ -13,12 +13,15 @@ import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
 import {
   type Board,
+  type BoardContent,
   type BoardContext,
   type BoardPreview,
+  boardContentSchema,
   boardContextSchema,
   boardSchema,
   workspaceBoardPreviewResponseSchema,
 } from './board.schema';
+import type { BoardRouteParams } from './board.types';
 
 type ListBoardsForWorkspaceError =
   | UnauthenticatedError
@@ -115,10 +118,7 @@ type GetBoardContextError =
 export async function getBoardContext({
   workspaceId,
   boardId,
-}: {
-  workspaceId: string;
-  boardId: string;
-}): Promise<Result<BoardContext, GetBoardContextError>> {
+}: BoardRouteParams): Promise<Result<BoardContext, GetBoardContextError>> {
   const res = await httpClient.get<BoardContext>(
     endpoints.workspaces.boards.get({ boardId, workspaceId })
   );
@@ -137,6 +137,46 @@ export async function getBoardContext({
 
   const parsed = parseWithSchema(
     boardContextSchema,
+    res.value,
+    () => ({ type: 'ValidationFailed' }) as const
+  );
+
+  if (!parsed.ok) {
+    return parsed;
+  }
+
+  return Ok(res.value);
+}
+
+type GetBoardContentError =
+  | UnauthenticatedError
+  | { type: 'BoardMemberNotFound' }
+  | UnexpectedError
+  | UnauthorizedError
+  | ValidationFailedError;
+
+export async function getBoardContent({
+  workspaceId,
+  boardId,
+}: BoardRouteParams): Promise<Result<BoardContent, GetBoardContentError>> {
+  const res = await httpClient.get<BoardContent>(
+    endpoints.workspaces.boards.content({ boardId, workspaceId })
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+      if (res.error.status === HttpStatus.NOT_FOUND) {
+        return Err({ type: 'BoardMemberNotFound' });
+      }
+    }
+    return Err({ type: 'Unexpected' });
+  }
+
+  const parsed = parseWithSchema(
+    boardContentSchema,
     res.value,
     () => ({ type: 'ValidationFailed' }) as const
   );
