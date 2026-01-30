@@ -28,5 +28,9 @@ export const endpoints = {
       get: ({ workspaceId, boardId }: BoardRouteParams) =>
         `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}`,
     },
+    lists: {
+      create: ({ workspaceId, boardId }: BoardRouteParams) =>
+        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}/lists`,
+    },
   },
 };

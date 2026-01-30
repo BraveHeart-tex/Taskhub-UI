@@ -1,4 +1,5 @@
 import { useForm } from '@tanstack/react-form';
+import { useParams } from '@tanstack/react-router';
 import { PlusIcon, XIcon } from 'lucide-react';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -10,9 +11,14 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useCreateList } from '../list.mutation';
 import { createListFormSchema } from '../list.schema';
 
 export function AddListForm() {
+  const createListMutation = useCreateList();
+  const params = useParams({
+    from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
+  });
   const [showForm, setShowForm] = useState(false);
   const formCardRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +30,15 @@ export function AddListForm() {
       onChange: createListFormSchema,
     },
     onSubmit: async ({ value }) => {
-      alert(JSON.stringify(value));
+      const result = await createListMutation.mutateAsync({
+        title: value.title,
+        boardId: params.boardId,
+        workspaceId: params.workspaceId,
+      });
+
+      if (result.ok) {
+        form.reset();
+      }
     },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(
@@ -48,7 +62,6 @@ export function AddListForm() {
       }
     };
 
-    // Use capture phase for better performance and to catch events before they bubble
     document.addEventListener('mousedown', handleClickOutside, true);
 
     return () => {
@@ -106,8 +119,12 @@ export function AddListForm() {
               </form.Field>
             </FieldGroup>
             <div className='flex items-center gap-1'>
-              <Button type='submit' form='create-list-form'>
-                Add List
+              <Button
+                type='submit'
+                form='create-list-form'
+                disabled={createListMutation.isPending}
+              >
+                {createListMutation.isPending ? 'Adding...' : 'Add'} List
               </Button>
               <Button
                 type='button'
@@ -117,6 +134,7 @@ export function AddListForm() {
                   setShowForm(false);
                   form.reset();
                 }}
+                disabled={createListMutation.isPending}
               >
                 <XIcon />
               </Button>
