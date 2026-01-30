@@ -19,7 +19,7 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   }
 
   return (
-    <div className='flex gap-4 overflow-x-auto pb-4'>
+    <div className='flex gap-4 overflow-x-auto pb-4 pt-px px-px'>
       {data.lists.map((list) => (
         <BoardList key={list.id} list={list} users={data.users} />
       ))}
