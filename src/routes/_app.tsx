@@ -5,7 +5,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { SquareKanbanIcon } from 'lucide-react';
-import { ModeToggle } from '@/components/mode-toggle';
+import { ModeSwitch } from '@/components/mode-switch';
 import { Large } from '@/components/ui/typography';
 import { UserMenu } from '@/components/user-menu';
 import { getMe } from '@/features/auth/auth.api';
@@ -39,7 +39,7 @@ function AppLayout() {
         </Link>
         <div className='ml-auto flex items-center gap-2'>
           <UserMenu />
-          <ModeToggle />
+          <ModeSwitch />
         </div>
       </header>
 
