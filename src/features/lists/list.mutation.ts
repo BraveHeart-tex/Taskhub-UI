@@ -10,7 +10,7 @@ export function useCreateList() {
     onSuccess: (result, variables) => {
       if (result.ok) {
         qc.invalidateQueries({
-          queryKey: queryKeys.boards.lists(variables.boardId),
+          queryKey: queryKeys.boards.content(variables.boardId),
         });
       }
     },
