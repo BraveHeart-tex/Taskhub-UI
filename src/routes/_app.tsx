@@ -5,6 +5,7 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { SquareKanbanIcon } from 'lucide-react';
+import { ModeToggle } from '@/components/mode-toggle';
 import { Large } from '@/components/ui/typography';
 import { UserMenu } from '@/components/user-menu';
 import { getMe } from '@/features/auth/auth.api';
@@ -36,8 +37,9 @@ function AppLayout() {
           <SquareKanbanIcon className='size-5' />
           <Large className='tracking-tight leading-none'>Taskhub</Large>
         </Link>
-        <div className='ml-auto'>
+        <div className='ml-auto flex items-center gap-2'>
           <UserMenu />
+          <ModeToggle />
         </div>
       </header>
 
