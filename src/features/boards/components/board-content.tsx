@@ -1,3 +1,5 @@
+import { PlusIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Muted } from '@/components/ui/typography';
 import { useBoardContent } from '../board.query';
 import { BoardList } from './board-list';
@@ -23,6 +25,12 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
       {data.lists.map((list) => (
         <BoardList key={list.id} list={list} users={data.users} />
       ))}
+      <Button
+        className='w-72 shrink-0 rounded-xl text-sm font-semibold leading-none gap-2'
+        variant='outline'
+      >
+        <PlusIcon /> Add Another List
+      </Button>
     </div>
   );
 }
