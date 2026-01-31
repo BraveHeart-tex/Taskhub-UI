@@ -51,3 +51,43 @@ export async function getFavoriteWorkspaces(): Promise<
 
   return Ok(parsed.value);
 }
+
+export async function addWorkspaceToFavorites(
+  workspaceId: string
+): Promise<Result<void, GetFavoriteWorkspacesError>> {
+  const res = await httpClient.post<void>(
+    endpoints.workspaces.favorites.create(workspaceId)
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+    }
+
+    return Err({ type: 'Unexpected' });
+  }
+
+  return Ok(undefined);
+}
+
+export async function removeWorkspaceFromFavorites(
+  workspaceId: string
+): Promise<Result<void, GetFavoriteWorkspacesError>> {
+  const res = await httpClient.delete<void>(
+    endpoints.workspaces.favorites.delete(workspaceId)
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+    }
+
+    return Err({ type: 'Unexpected' });
+  }
+
+  return Ok(undefined);
+}

@@ -15,6 +15,12 @@ export const endpoints = {
     signup: `${BASE}/api/auth/signup`,
   },
   workspaces: {
+    favorites: {
+      create: (workspaceId: string) =>
+        `${BASE}/api/workspaces/${workspaceId}/favorites`,
+      delete: (workspaceId: string) =>
+        `${BASE}/api/workspaces/${workspaceId}/favorites`,
+    },
     list: `${BASE}/api/workspaces`,
     create: `${BASE}/api/workspaces`,
     get: (workspaceId: string) => `${BASE}/api/workspaces/${workspaceId}`,
