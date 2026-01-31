@@ -73,10 +73,7 @@ export function UserMenu() {
 
         <DropdownMenuSeparator className='my-2' />
 
-        <DropdownMenuItem
-          onClick={handleLogout}
-          className='gap-2 text-destructive focus:text-destructive'
-        >
+        <DropdownMenuItem onClick={handleLogout} className='gap-2'>
           <LogOutIcon className='h-4 w-4' />
           <span>Log out</span>
         </DropdownMenuItem>
