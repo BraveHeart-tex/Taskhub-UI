@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { WorkspaceSummaryDto } from '@/features/workspaces/workspace.schemas';
 import { cn, mockAvatarUrl } from '@/lib/utils';
+import { useTheme } from '@/shared/theme/use-theme';
 
 interface WorkspaceCardProps {
   workspace: WorkspaceSummaryDto;
@@ -58,6 +59,7 @@ export function WorkspaceCard({
   onOpen,
   className,
 }: WorkspaceCardProps) {
+  const { theme } = useTheme();
   const displayMembers = workspace.membersPreview.slice(0, 4);
   const remainingMembers = workspace.memberCount - displayMembers.length;
 
@@ -116,7 +118,7 @@ export function WorkspaceCard({
                       Settings
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className='text-destructive focus:text-destructive'>
+                    <DropdownMenuItem variant='destructive'>
                       <Trash2 className='mr-2 size-4' />
                       Delete
                     </DropdownMenuItem>
@@ -155,7 +157,11 @@ export function WorkspaceCard({
       </CardContent>
 
       <CardFooter className='border-t pt-4'>
-        <Button className='w-full' onClick={() => onOpen?.(workspace)}>
+        <Button
+          className='w-full'
+          onClick={() => onOpen?.(workspace)}
+          variant={theme === 'dark' ? 'secondary' : 'outline'}
+        >
           Open Workspace
         </Button>
       </CardFooter>
