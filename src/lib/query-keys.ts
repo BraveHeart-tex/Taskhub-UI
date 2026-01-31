@@ -1,27 +1,21 @@
 export const queryKeys = {
-  auth: {
-    all: ['auth'] as const,
-    me: () => [...queryKeys.auth.all, 'me'] as const,
+  me: {
+    all: ['me'] as const,
+    favoriteWorkspaces: () =>
+      [...queryKeys.me.all, 'favoriteWorkspaces'] as const,
   },
-
   workspaces: {
     all: ['workspaces'] as const,
-
     list: () => [...queryKeys.workspaces.all, 'list'] as const,
-
     byId: (workspaceId: string) =>
       [...queryKeys.workspaces.all, 'byId', workspaceId] as const,
-
     summary: (workspaceId: string) =>
       [...queryKeys.workspaces.byId(workspaceId), 'summary'] as const,
-
     members: (workspaceId: string) =>
       [...queryKeys.workspaces.byId(workspaceId), 'members'] as const,
-
     boards: (workspaceId: string) =>
       [...queryKeys.workspaces.byId(workspaceId), 'boards'] as const,
   },
-
   boards: {
     all: ['boards'] as const,
     byId: (boardId: string) =>
