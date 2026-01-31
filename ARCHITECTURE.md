@@ -1,6 +1,6 @@
 # Project Architecture & Onboarding Guide
 
-A Trello-like collaborative board application built with **TanStack Router**, **React Query**, **Zustand**, **shadcn/ui**, and **PostgreSQL + Drizzle ORM**.
+A Trello-like collaborative board application built with **TanStack Router**, **React Query**, **Zustand**, and **shadcn/ui**
 
 This document explains the **architecture, data flow, routing responsibilities, and design philosophy** so new contributors (human or AI) can onboard quickly and make consistent decisions.
 
