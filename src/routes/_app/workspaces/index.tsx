@@ -3,9 +3,10 @@ import {
   useLoaderData,
   useRouter,
 } from '@tanstack/react-router';
+import { EmptyState } from '@/components/empty-state';
 import { useModalActions } from '@/components/modal-host/modal.store';
 import { Button } from '@/components/ui/button';
-import { H3, H4, Muted } from '@/components/ui/typography';
+import { H3, Muted } from '@/components/ui/typography';
 import { WorkspaceCard } from '@/features/workspaces/components/workspace-card';
 import { listWorkspaces } from '@/features/workspaces/workspace.api';
 
@@ -39,10 +40,10 @@ function WorkspacesRoute() {
         </Button>
       </div>
       {workspaces.length === 0 ? (
-        <div className='flex min-h-50 flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30 text-center'>
-          <H4>No workspaces yet</H4>
-          <Muted>Create your first workspace to get started</Muted>
-        </div>
+        <EmptyState
+          title='No workspaces yet'
+          description='Create your first workspace to get started'
+        />
       ) : (
         <ul className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {workspaces.map((workspace) => (
