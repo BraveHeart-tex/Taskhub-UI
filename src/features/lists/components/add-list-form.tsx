@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { useCreateList } from '../list.mutation';
 import { createListFormSchema } from '../list.schema';
 
-export function AddListForm() {
+export function AddListForm({ label }: { label: string }) {
   const createListMutation = useCreateList();
   const params = useParams({
     from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
@@ -151,7 +151,7 @@ export function AddListForm() {
       variant='outline'
       onClick={() => setShowForm(true)}
     >
-      <PlusIcon /> Add Another List
+      <PlusIcon /> {label}
     </Button>
   );
 }

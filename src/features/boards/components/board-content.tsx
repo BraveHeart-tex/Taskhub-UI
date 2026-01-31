@@ -16,7 +16,7 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   }
 
   if (!data || data.lists.length === 0) {
-    return <Muted className='text-center'>No lists yet</Muted>;
+    return <AddListForm label={'Add List'} />;
   }
 
   return (
@@ -24,7 +24,7 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
       {data.lists.map((list) => (
         <BoardList key={list.id} list={list} users={data.users} />
       ))}
-      <AddListForm />
+      <AddListForm label={'Add Another List'} />
     </div>
   );
 }
