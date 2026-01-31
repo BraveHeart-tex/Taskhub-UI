@@ -6,7 +6,7 @@ import {
 import { EmptyState } from '@/components/empty-state';
 import { useModalActions } from '@/components/modal-host/modal.store';
 import { Button } from '@/components/ui/button';
-import { H3, Muted } from '@/components/ui/typography';
+import { H3 } from '@/components/ui/typography';
 import { WorkspaceCard } from '@/features/workspaces/components/workspace-card';
 import { listWorkspaces } from '@/features/workspaces/workspace.api';
 
@@ -31,10 +31,7 @@ function WorkspacesRoute() {
   return (
     <div className='flex flex-col gap-6'>
       <div className='flex items-center justify-between'>
-        <div className='space-y-1'>
-          <H3>Workspaces</H3>
-          <Muted>Manage your workspaces here</Muted>
-        </div>
+        <H3>Your Workspaces</H3>
         <Button onClick={() => openModal({ type: 'create-workspace' })}>
           Create workspace
         </Button>
