@@ -104,7 +104,7 @@ export async function logout(): Promise<Result<void, AuthError>> {
 }
 
 export async function getMe(): Promise<Result<User | null, AuthError>> {
-  const res = await httpClient.get<unknown>(endpoints.auth.me);
+  const res = await httpClient.get<unknown>(endpoints.me.get);
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {

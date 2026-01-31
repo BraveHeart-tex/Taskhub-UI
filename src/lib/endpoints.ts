@@ -1,36 +1,42 @@
 import type { BoardRouteParams } from '@/features/boards/board.types';
 
+const BASE = import.meta.env.VITE_API_BASE_URL;
+
 export const endpoints = {
+  me: {
+    get: `${BASE}/api/me`,
+    favoriteWorkspaces: {
+      list: `${BASE}/api/me/favorite-workspaces`,
+    },
+  },
   auth: {
-    me: `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
-    login: `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-    logout: `${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`,
-    signup: `${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`,
+    login: `${BASE}/api/auth/login`,
+    logout: `${BASE}/api/auth/logout`,
+    signup: `${BASE}/api/auth/signup`,
   },
   workspaces: {
-    list: `${import.meta.env.VITE_API_BASE_URL}/api/workspaces`,
-    create: `${import.meta.env.VITE_API_BASE_URL}/api/workspaces`,
-    get: (workspaceId: string) =>
-      `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}`,
+    list: `${BASE}/api/workspaces`,
+    create: `${BASE}/api/workspaces`,
+    get: (workspaceId: string) => `${BASE}/api/workspaces/${workspaceId}`,
     summary: (workspaceId: string) =>
-      `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/summary`,
+      `${BASE}/api/workspaces/${workspaceId}/summary`,
     members: {
       list: (workspaceId: string) =>
-        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/members`,
+        `${BASE}/api/workspaces/${workspaceId}/members`,
     },
     boards: {
       create: (workspaceId: string) =>
-        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards`,
-      content: ({ workspaceId, boardId }: BoardRouteParams) =>
-        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}/content`,
+        `${BASE}/api/workspaces/${workspaceId}/boards`,
       list: (workspaceId: string) =>
-        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards`,
+        `${BASE}/api/workspaces/${workspaceId}/boards`,
       get: ({ workspaceId, boardId }: BoardRouteParams) =>
-        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}`,
+        `${BASE}/api/workspaces/${workspaceId}/boards/${boardId}`,
+      content: ({ workspaceId, boardId }: BoardRouteParams) =>
+        `${BASE}/api/workspaces/${workspaceId}/boards/${boardId}/content`,
     },
     lists: {
       create: ({ workspaceId, boardId }: BoardRouteParams) =>
-        `${import.meta.env.VITE_API_BASE_URL}/api/workspaces/${workspaceId}/boards/${boardId}/lists`,
+        `${BASE}/api/workspaces/${workspaceId}/boards/${boardId}/lists`,
     },
   },
 };
