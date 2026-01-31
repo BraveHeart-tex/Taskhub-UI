@@ -31,7 +31,7 @@ export const Route = createFileRoute('/_app')({
 
 function AppLayout() {
   return (
-    <div className='h-screen flex flex-col overflow-hidden'>
+    <div className='fixed inset-0 flex flex-col'>
       <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
         <Link to='/' className='flex items-center gap-2 select-none'>
           <SquareKanbanIcon className='size-5' />
@@ -42,12 +42,9 @@ function AppLayout() {
           <ModeSwitch />
         </div>
       </header>
-
-      <div className='flex flex-1 min-h-0'>
-        <main className='h-full overflow-y-auto p-4 flex-1 min-h-0'>
-          <Outlet />
-        </main>
-      </div>
+      <main className='flex-1 overflow-y-auto p-4'>
+        <Outlet />
+      </main>
     </div>
   );
 }
