@@ -10,7 +10,7 @@ import { httpClient } from '@/lib/http/http-client';
 import { HttpStatus } from '@/lib/http/http-status';
 import { Err, Ok, type Result } from '@/lib/result';
 import { parseWithSchema } from '@/lib/validation/parse-with-schema';
-import { type User, userSchema } from '../users/users.schemas';
+import { type User, userSchema } from '../users/user.schemas';
 import type { SignupInput } from './auth.schemas';
 
 type AuthError =

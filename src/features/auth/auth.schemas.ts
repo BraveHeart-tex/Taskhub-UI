@@ -2,7 +2,7 @@ import z from 'zod';
 import {
   MAX_USER_NAME_LENGTH,
   MIN_USER_NAME_LENGTH,
-} from '../users/users.constants';
+} from '../users/user.constants';
 import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from './auth.constants';
 
 export const loginInputSchema = z.object({

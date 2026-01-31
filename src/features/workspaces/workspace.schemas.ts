@@ -6,7 +6,7 @@ import {
 import {
   MAX_USER_NAME_LENGTH,
   MIN_USER_NAME_LENGTH,
-} from '../users/users.constants';
+} from '../users/user.constants';
 import {
   MAX_WORKSPACE_NAME_LENGTH,
   MIN_WORKSPACE_NAME_LENGTH,

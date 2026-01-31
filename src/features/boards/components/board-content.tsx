@@ -1,6 +1,6 @@
 import { Muted } from '@/components/ui/typography';
 import { AddListForm } from '@/features/lists/components/add-list-form';
-import { useBoardContent } from '../board.query';
+import { useBoardContent } from '../board.queries';
 import { BoardList } from './board-list';
 
 interface BoardContentProps {

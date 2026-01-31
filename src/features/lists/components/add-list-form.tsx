@@ -11,7 +11,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { useCreateList } from '../list.mutation';
+import { useCreateList } from '../list.mutations';
 import { createListFormSchema } from '../list.schema';
 
 export function AddListForm({ label }: { label: string }) {

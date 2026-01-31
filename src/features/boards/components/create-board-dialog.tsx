@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { showErrorToast, showSuccessToast } from '@/shared/toast-helpers';
-import { useCreateBoard } from '../board.mutation';
+import { useCreateBoard } from '../board.mutations';
 import { createBoardInputSchema } from '../board.schema';
 
 interface CreateBoardDialogProps {

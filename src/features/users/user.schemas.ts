@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MAX_USER_NAME_LENGTH, MIN_USER_NAME_LENGTH } from './users.constants';
+import { MAX_USER_NAME_LENGTH, MIN_USER_NAME_LENGTH } from './user.constants';
 
 export const userSchema = z.object({
   id: z.uuid(),
