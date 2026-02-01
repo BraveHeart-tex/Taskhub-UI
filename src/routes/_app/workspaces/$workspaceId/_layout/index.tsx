@@ -41,7 +41,7 @@ function WorkspaceHomePage() {
 
   return (
     <div className='space-y-8'>
-      <section className='flex items-start justify-between gap-4'>
+      <section className='flex items-start justify-between gap-4 flex-wrap'>
         <div className='space-y-2'>
           <div className='flex items-center gap-2'>
             <H2> {workspaceSummary.name}</H2>
