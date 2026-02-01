@@ -3,6 +3,10 @@ import { StarIcon } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  useFavoriteBoard,
+  useUnfavoriteBoard,
+} from '@/features/board-favorite/board-favorite.hooks';
 import { cn } from '@/lib/utils';
 import type { Dashboard } from '../dashboard.schema';
 
@@ -28,9 +32,23 @@ export function BoardGrid({ workspaceId, boards }: BoardGridProps) {
 }
 
 function BoardCard({ board }: { board: Dashboard['boards'][number] }) {
+  const favoriteBoardMutation = useFavoriteBoard();
+  const unfavoriteBoardMutation = useUnfavoriteBoard();
+
+  const isLoading =
+    favoriteBoardMutation.isPending || unfavoriteBoardMutation.isPending;
+
   const handleFavoriteClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     event.preventDefault();
+
+    if (isLoading) return;
+
+    if (board.isFavorited) {
+      unfavoriteBoardMutation.mutate(board.id);
+    } else {
+      favoriteBoardMutation.mutate(board.id);
+    }
   };
 
   return (
@@ -41,10 +59,16 @@ function BoardCard({ board }: { board: Dashboard['boards'][number] }) {
             {board.title}
           </h5>
 
-          <Button variant='ghost' size='icon' onClick={handleFavoriteClick}>
+          <Button
+            variant='ghost'
+            size='icon'
+            onClick={handleFavoriteClick}
+            disabled={isLoading}
+            aria-pressed={board.isFavorited}
+          >
             <StarIcon
               className={cn(
-                'size-4 shrink-0 transition-colors',
+                'size-4 transition-colors',
                 board.isFavorited
                   ? 'fill-yellow-400 text-yellow-400'
                   : 'text-muted-foreground/40 group-hover:text-muted-foreground'

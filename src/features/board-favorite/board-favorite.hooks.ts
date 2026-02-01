@@ -3,7 +3,7 @@ import { createFavoriteMutation } from './use-board-favorite';
 
 export const useFavoriteBoard = createFavoriteMutation(addFavoriteBoard, 'add');
 
-export const useUnFavoriteBoard = createFavoriteMutation(
+export const useUnfavoriteBoard = createFavoriteMutation(
   removeFavoriteBoard,
   'remove'
 );
