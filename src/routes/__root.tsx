@@ -1,4 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { AppErrorBoundary } from '@/components/app-error-boundary';
@@ -17,7 +18,10 @@ function RootLayout() {
       <Outlet />
       <ModalHost />
       {import.meta.env.DEV && (
-        <TanStackRouterDevtools position='bottom-right' />
+        <>
+          <TanStackRouterDevtools position='bottom-right' />
+          <ReactQueryDevtools position='right' />
+        </>
       )}
     </>
   );
