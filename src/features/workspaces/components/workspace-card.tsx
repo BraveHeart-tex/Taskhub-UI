@@ -33,7 +33,6 @@ interface WorkspaceCardProps {
   onOpen?: (workspace: WorkspaceSummaryDto) => void;
   onEdit?: (workspace: WorkspaceSummaryDto) => void;
   onDelete?: (workspace: WorkspaceSummaryDto) => void;
-  onToggleFavorite?: (workspace: WorkspaceSummaryDto) => void;
   className?: string;
 }
 
@@ -83,16 +82,6 @@ export function WorkspaceCard({
           </div>
 
           <div className='flex items-center gap-1'>
-            {/*<Button
-              variant='ghost'
-              size='icon'
-              onClick={() => onToggleFavorite?.(workspace)}
-            >
-              <Star
-                className={cn('size-4', workspace.isFavorite && 'fill-current')}
-              />
-            </Button>*/}
-
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
