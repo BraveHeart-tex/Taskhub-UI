@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AppWorkspacesIndexRouteImport } from './routes/_app/workspaces/index'
+import { Route as AppBoardsIndexRouteImport } from './routes/_app/boards/index'
 import { Route as AppWorkspacesWorkspaceIdLayoutRouteImport } from './routes/_app/workspaces/$workspaceId/_layout'
 import { Route as AppWorkspacesWorkspaceIdLayoutIndexRouteImport } from './routes/_app/workspaces/$workspaceId/_layout/index'
 import { Route as AppWorkspacesWorkspaceIdLayoutSettingsIndexRouteImport } from './routes/_app/workspaces/$workspaceId/_layout/settings/index'
@@ -48,6 +49,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 const AppWorkspacesIndexRoute = AppWorkspacesIndexRouteImport.update({
   id: '/workspaces/',
   path: '/workspaces/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBoardsIndexRoute = AppBoardsIndexRouteImport.update({
+  id: '/boards/',
+  path: '/boards/',
   getParentRoute: () => AppRoute,
 } as any)
 const AppWorkspacesWorkspaceIdLayoutRoute =
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/boards': typeof AppBoardsIndexRoute
   '/workspaces': typeof AppWorkspacesIndexRoute
   '/workspaces/$workspaceId': typeof AppWorkspacesWorkspaceIdLayoutRouteWithChildren
   '/workspaces/$workspaceId/': typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
+  '/boards': typeof AppBoardsIndexRoute
   '/workspaces': typeof AppWorkspacesIndexRoute
   '/workspaces/$workspaceId': typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
   '/workspaces/$workspaceId/boards': typeof AppWorkspacesWorkspaceIdLayoutBoardsIndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
+  '/_app/boards/': typeof AppBoardsIndexRoute
   '/_app/workspaces/': typeof AppWorkspacesIndexRoute
   '/_app/workspaces/$workspaceId/_layout': typeof AppWorkspacesWorkspaceIdLayoutRouteWithChildren
   '/_app/workspaces/$workspaceId/_layout/': typeof AppWorkspacesWorkspaceIdLayoutIndexRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
+    | '/boards'
     | '/workspaces'
     | '/workspaces/$workspaceId'
     | '/workspaces/$workspaceId/'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signup'
+    | '/boards'
     | '/workspaces'
     | '/workspaces/$workspaceId'
     | '/workspaces/$workspaceId/boards'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_auth/login'
     | '/_auth/signup'
+    | '/_app/boards/'
     | '/_app/workspaces/'
     | '/_app/workspaces/$workspaceId/_layout'
     | '/_app/workspaces/$workspaceId/_layout/'
@@ -213,6 +225,13 @@ declare module '@tanstack/react-router' {
       path: '/workspaces'
       fullPath: '/workspaces'
       preLoaderRoute: typeof AppWorkspacesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/boards/': {
+      id: '/_app/boards/'
+      path: '/boards'
+      fullPath: '/boards'
+      preLoaderRoute: typeof AppBoardsIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/workspaces/$workspaceId/_layout': {
@@ -288,11 +307,13 @@ const AppWorkspacesWorkspaceIdLayoutRouteWithChildren =
   )
 
 interface AppRouteChildren {
+  AppBoardsIndexRoute: typeof AppBoardsIndexRoute
   AppWorkspacesIndexRoute: typeof AppWorkspacesIndexRoute
   AppWorkspacesWorkspaceIdLayoutRoute: typeof AppWorkspacesWorkspaceIdLayoutRouteWithChildren
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppBoardsIndexRoute: AppBoardsIndexRoute,
   AppWorkspacesIndexRoute: AppWorkspacesIndexRoute,
   AppWorkspacesWorkspaceIdLayoutRoute:
     AppWorkspacesWorkspaceIdLayoutRouteWithChildren,

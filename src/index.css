@@ -166,4 +166,8 @@
   button > svg {
     @apply size-4;
   }
+
+  a > svg {
+    @apply size-4;
+  }
 }

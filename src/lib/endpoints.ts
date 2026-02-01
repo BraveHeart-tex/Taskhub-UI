@@ -8,6 +8,7 @@ export const endpoints = {
     favoriteWorkspaces: {
       list: `${BASE}/api/users/me/favorite-workspaces`,
     },
+    dashboard: `${BASE}/api/users/me/dashboard`,
   },
   auth: {
     login: `${BASE}/api/auth/login`,

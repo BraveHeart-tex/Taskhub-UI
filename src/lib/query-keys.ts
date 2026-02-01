@@ -3,6 +3,7 @@ export const queryKeys = {
     all: ['me'] as const,
     favoriteWorkspaces: () =>
       [...queryKeys.me.all, 'favoriteWorkspaces'] as const,
+    dashboard: () => [...queryKeys.me.all, 'dashboard'] as const,
   },
   workspaces: {
     all: ['workspaces'] as const,
