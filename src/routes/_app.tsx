@@ -1,13 +1,5 @@
-import {
-  createFileRoute,
-  Link,
-  Outlet,
-  redirect,
-} from '@tanstack/react-router';
-import { SquareKanbanIcon } from 'lucide-react';
-import { ModeSwitch } from '@/components/mode-switch';
-import { Large } from '@/components/ui/typography';
-import { UserMenu } from '@/components/user-menu';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { AppLayout } from '@/components/app-layout';
 import { getMe } from '@/features/auth/auth.api';
 
 export const Route = createFileRoute('/_app')({
@@ -26,25 +18,9 @@ export const Route = createFileRoute('/_app')({
   loader: ({ context }) => {
     return { user: context.user };
   },
-  component: AppLayout,
+  component: AppRoute,
 });
 
-function AppLayout() {
-  return (
-    <div className='fixed inset-0 flex flex-col'>
-      <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
-        <Link to='/' className='flex items-center gap-2 select-none'>
-          <SquareKanbanIcon className='size-5' />
-          <Large className='tracking-tight leading-none'>Taskhub</Large>
-        </Link>
-        <div className='ml-auto flex items-center gap-2'>
-          <UserMenu />
-          <ModeSwitch />
-        </div>
-      </header>
-      <main className='flex-1 overflow-y-auto p-4'>
-        <Outlet />
-      </main>
-    </div>
-  );
+function AppRoute() {
+  return <AppLayout />;
 }
