@@ -43,6 +43,7 @@ export function BoardsPage() {
       <section className='space-y-8'>
         <H3>Your Workspaces</H3>
 
+        {/*TODO: implement create workspace form here*/}
         {workspaces.length === 0 ? (
           <EmptyState
             title='No Workspaces'

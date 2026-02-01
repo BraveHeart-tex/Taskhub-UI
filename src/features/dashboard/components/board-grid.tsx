@@ -1,4 +1,6 @@
 import { Link } from '@tanstack/react-router';
+import { useModalActions } from '@/components/modal-host/modal.store';
+import { Button } from '@/components/ui/button';
 import { BoardTile } from '@/features/boards/components/board-tile';
 import type { Dashboard } from '../dashboard.schema';
 
@@ -7,6 +9,15 @@ interface BoardGridProps {
 }
 
 export function BoardGrid({ boards }: BoardGridProps) {
+  const { openModal } = useModalActions();
+
+  const handleCreateClick = () => {
+    openModal({
+      type: 'create-board',
+      workspaceId: boards[0]?.workspaceId,
+    });
+  };
+
   return (
     <div className='grid grid-cols-2 gap-2 md:grid-cols-4'>
       {boards.map((board) => (
@@ -23,6 +34,13 @@ export function BoardGrid({ boards }: BoardGridProps) {
           />
         </Link>
       ))}
+      <Button
+        variant='outline'
+        className='h-full min-h-22.5'
+        onClick={handleCreateClick}
+      >
+        Create Board
+      </Button>
     </div>
   );
 }
