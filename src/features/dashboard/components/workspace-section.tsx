@@ -11,7 +11,7 @@ export function WorkspaceSection({ workspace, boards }: Props) {
   return (
     <article className='space-y-4'>
       <WorkspaceHeader workspace={workspace} />
-      <BoardGrid workspaceId={workspace.id} boards={boards} />
+      <BoardGrid boards={boards} />
     </article>
   );
 }

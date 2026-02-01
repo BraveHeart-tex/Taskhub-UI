@@ -1,82 +1,28 @@
 import { Link } from '@tanstack/react-router';
-import { StarIcon } from 'lucide-react';
-import type { MouseEvent } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  useFavoriteBoard,
-  useUnfavoriteBoard,
-} from '@/features/board-favorite/board-favorite.hooks';
-import { cn } from '@/lib/utils';
+import { BoardTile } from '@/features/boards/components/board-tile';
 import type { Dashboard } from '../dashboard.schema';
 
 interface BoardGridProps {
-  workspaceId: string;
   boards: Dashboard['boards'];
 }
 
-export function BoardGrid({ workspaceId, boards }: BoardGridProps) {
+export function BoardGrid({ boards }: BoardGridProps) {
   return (
     <div className='grid grid-cols-2 gap-2 md:grid-cols-4'>
       {boards.map((board) => (
         <Link
           key={board.id}
           to='/workspaces/$workspaceId/boards/$boardId'
-          params={{ workspaceId, boardId: board.id }}
+          params={{ workspaceId: board.workspaceId, boardId: board.id }}
         >
-          <BoardCard board={board} />
+          <BoardTile
+            isFavorited={board.isFavorited}
+            id={board.id}
+            title={board.title}
+            workspaceId={board.workspaceId}
+          />
         </Link>
       ))}
     </div>
-  );
-}
-
-function BoardCard({ board }: { board: Dashboard['boards'][number] }) {
-  const favoriteBoardMutation = useFavoriteBoard();
-  const unfavoriteBoardMutation = useUnfavoriteBoard();
-
-  const isLoading =
-    favoriteBoardMutation.isPending || unfavoriteBoardMutation.isPending;
-
-  const handleFavoriteClick = (event: MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    if (isLoading) return;
-
-    if (board.isFavorited) {
-      unfavoriteBoardMutation.mutate(board.id);
-    } else {
-      favoriteBoardMutation.mutate(board.id);
-    }
-  };
-
-  return (
-    <Card>
-      <CardContent className='flex h-full flex-col justify-between gap-2 p-3'>
-        <div className='flex items-center justify-between gap-2'>
-          <h5 className='text-sm font-medium leading-tight line-clamp-2'>
-            {board.title}
-          </h5>
-
-          <Button
-            variant='ghost'
-            size='icon'
-            onClick={handleFavoriteClick}
-            disabled={isLoading}
-            aria-pressed={board.isFavorited}
-          >
-            <StarIcon
-              className={cn(
-                'size-4 transition-colors',
-                board.isFavorited
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-muted-foreground/40 group-hover:text-muted-foreground'
-              )}
-            />
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
   );
 }

@@ -1,13 +1,18 @@
 import { StarIcon } from 'lucide-react';
 import { H3 } from '@/components/ui/typography';
-import type { Dashboard } from '../dashboard.schema';
+import { BoardGrid } from './board-grid';
 
 interface FavoritesSectionProps {
-  favorites: Dashboard['favorites'];
+  favoriteBoards: {
+    isFavorited: boolean;
+    id: string;
+    title: string;
+    workspaceId: string;
+  }[];
 }
 
-export function FavoritesSection({ favorites }: FavoritesSectionProps) {
-  if (favorites.length === 0) return null;
+export function FavoritesSection({ favoriteBoards }: FavoritesSectionProps) {
+  if (favoriteBoards.length === 0) return null;
 
   return (
     <section className='space-y-2'>
@@ -15,6 +20,7 @@ export function FavoritesSection({ favorites }: FavoritesSectionProps) {
         <StarIcon className='size-4' />
         <H3>Favorite Boards</H3>
       </div>
+      <BoardGrid boards={favoriteBoards} />
     </section>
   );
 }

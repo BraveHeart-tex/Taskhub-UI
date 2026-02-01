@@ -1,10 +1,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 
-export function BoardCard({
-  card,
-  user,
-}: {
+interface CardItemProps {
   card: {
     title: string;
     description: string | null;
@@ -13,7 +10,9 @@ export function BoardCard({
     fullName: string;
     avatarUrl: string | null;
   };
-}) {
+}
+
+export function CardItem({ card, user }: CardItemProps) {
   return (
     <Card>
       <CardContent className='p-3 space-y-2'>

@@ -27,16 +27,18 @@ export function BoardsPage() {
     );
   }
 
-  const { workspaces, boards, favorites } = data;
+  const { workspaces, boards } = data;
 
   const workspacesToBoards = Object.groupBy(
     boards,
     (board) => board.workspaceId
   );
 
+  const favoriteBoards = boards.filter((board) => board.isFavorited);
+
   return (
     <div className='space-y-4'>
-      <FavoritesSection favorites={favorites} />
+      <FavoritesSection favoriteBoards={favoriteBoards} />
 
       <section className='space-y-8'>
         <H3>Your Workspaces</H3>

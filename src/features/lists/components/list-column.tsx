@@ -1,15 +1,15 @@
 import { MoreHorizontalIcon, PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import type { BoardContent } from '../board.schema';
-import { BoardCard } from './board-card';
+import type { BoardContent } from '@/features/boards/board.schema';
+import { CardItem } from '@/features/cards/components/card-item';
 
-interface BoardListProps {
+interface ListColumnProps {
   list: BoardContent['lists'][number];
   users: BoardContent['users'];
 }
 
-export function BoardList({ list, users }: BoardListProps) {
+export function ListColumn({ list, users }: ListColumnProps) {
   return (
     <article className='w-72 shrink-0'>
       <Card className='flex h-full flex-col rounded-xl bg-muted/50'>
@@ -22,7 +22,7 @@ export function BoardList({ list, users }: BoardListProps) {
 
         <div className='flex-1 space-y-2 overflow-y-auto px-3'>
           {list.cards.map((card) => (
-            <BoardCard key={card.id} card={card} user={users[card.createdBy]} />
+            <CardItem key={card.id} card={card} user={users[card.createdBy]} />
           ))}
         </div>
 

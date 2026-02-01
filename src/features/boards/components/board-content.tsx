@@ -1,7 +1,7 @@
 import { Muted } from '@/components/ui/typography';
 import { AddListForm } from '@/features/lists/components/add-list-form';
+import { ListColumn } from '@/features/lists/components/list-column';
 import { useBoardContent } from '../board.queries';
-import { BoardList } from './board-list';
 
 interface BoardContentProps {
   workspaceId: string;
@@ -22,7 +22,7 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   return (
     <div className='flex gap-4 overflow-x-auto pb-4 pt-px px-px'>
       {data.lists.map((list) => (
-        <BoardList key={list.id} list={list} users={data.users} />
+        <ListColumn key={list.id} list={list} users={data.users} />
       ))}
       <AddListForm label={'Add Another List'} />
     </div>
