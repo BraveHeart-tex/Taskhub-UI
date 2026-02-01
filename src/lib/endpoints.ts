@@ -4,9 +4,9 @@ const BASE = import.meta.env.VITE_API_BASE_URL;
 
 export const endpoints = {
   me: {
-    get: `${BASE}/api/me`,
+    get: `${BASE}/api/users/me`,
     favoriteWorkspaces: {
-      list: `${BASE}/api/me/favorite-workspaces`,
+      list: `${BASE}/api/users/me/favorite-workspaces`,
     },
   },
   auth: {
