@@ -48,7 +48,6 @@ export function BoardsPage() {
   return (
     <div className='space-y-4'>
       <FavoritesSection favoriteBoards={favoriteBoards} />
-
       <section className='space-y-8'>
         <H3>Your Workspaces</H3>
         {workspaces.length === 0 ? (

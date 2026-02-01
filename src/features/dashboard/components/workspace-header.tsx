@@ -11,9 +11,9 @@ interface WorkspaceHeaderProps {
 
 export function WorkspaceHeader({ workspace }: WorkspaceHeaderProps) {
   return (
-    <div className='flex items-center justify-between'>
+    <div className='flex items-center justify-between flex-wrap gap-4'>
       <div className='flex items-center gap-2'>
-        <div className='size-8 rounded-md bg-primary text-primary-foreground flex items-center justify-center font-semibold uppercase'>
+        <div className='size-8 rounded-md bg-primary text-primary-foreground flex items-center justify-center font-semibold uppercase shrink-0'>
           {workspace.name[0]}
         </div>
         <H4>{workspace.name}</H4>
