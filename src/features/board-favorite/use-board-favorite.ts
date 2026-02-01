@@ -10,7 +10,7 @@ export function createFavoriteMutation(
 ) {
   return function useBoardFavorite() {
     const queryClient = useQueryClient();
-    const queryKey = queryKeys.me.favoriteWorkspaces();
+    const queryKey = queryKeys.me.dashboard();
 
     return useMutation({
       mutationFn,

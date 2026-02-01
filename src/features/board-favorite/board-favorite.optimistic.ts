@@ -9,7 +9,7 @@ export function optimisticallyUpdateFavorite(
   boardId: string,
   action: FavoriteAction
 ) {
-  const queryKey = queryKeys.me.favoriteWorkspaces();
+  const queryKey = queryKeys.me.dashboard();
 
   const previous = queryClient.getQueryData<Dashboard>(queryKey);
 
