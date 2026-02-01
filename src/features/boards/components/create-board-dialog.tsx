@@ -103,7 +103,10 @@ export function CreateBoardDialog({
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Workspace Name</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Board Name{' '}
+                    <span className='text-destructive text-sm'>*</span>
+                  </FieldLabel>
                   <Input
                     id={field.name}
                     name={field.name}

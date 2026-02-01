@@ -16,7 +16,10 @@ export const boardSchema = z.object({
 export type Board = z.infer<typeof boardSchema>;
 
 export const createBoardInputSchema = z.object({
-  title: z.string().min(MIN_BOARD_NAME_LENGTH).max(MAX_BOARD_NAME_LENGTH),
+  title: z
+    .string()
+    .min(MIN_BOARD_NAME_LENGTH, 'Board name is required')
+    .max(MAX_BOARD_NAME_LENGTH, 'Board name is too long'),
 });
 
 export const boardPreviewSchema = z.object({
