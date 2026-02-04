@@ -1,4 +1,5 @@
 import type { BoardRouteParams } from '@/features/boards/board.types';
+import type { CardRouteParams } from '@/features/lists/cards/card.types';
 
 const BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -46,6 +47,10 @@ export const endpoints = {
     lists: {
       create: ({ workspaceId, boardId }: BoardRouteParams) =>
         `${BASE}/api/workspaces/${workspaceId}/boards/${boardId}/lists`,
+      cards: {
+        create: ({ workspaceId, boardId, listId }: CardRouteParams) =>
+          `${BASE}/api/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards`,
+      },
     },
   },
 };

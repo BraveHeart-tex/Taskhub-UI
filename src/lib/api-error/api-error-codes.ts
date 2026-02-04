@@ -8,6 +8,12 @@ export const API_ERROR_CODES = {
   BOARD: {
     BOARD_TITLE_ALREADY_EXISTS: 'BOARD_TITLE_ALREADY_EXISTS',
   },
+  BOARD_MEMBER: {
+    BOARD_MEMBER_NOT_FOUND: 'BOARD_MEMBER_NOT_FOUND',
+  },
+  LIST: {
+    LIST_NOT_FOUND: 'LIST_NOT_FOUND',
+  },
 } as const;
 
 type ErrorDomains = typeof API_ERROR_CODES;

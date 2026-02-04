@@ -9,7 +9,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function ListActions() {
+interface ListActionsProps {
+  onAddCard: () => void;
+}
+
+export function ListActions({ onAddCard }: ListActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -24,7 +28,7 @@ export function ListActions() {
           <DropdownMenuLabel className='text-center'>
             List Actions
           </DropdownMenuLabel>
-          <DropdownMenuItem>Add card</DropdownMenuItem>
+          <DropdownMenuItem onClick={onAddCard}>Add card</DropdownMenuItem>
           <DropdownMenuItem>Copy list</DropdownMenuItem>
           <DropdownMenuItem>Archive list</DropdownMenuItem>
           <DropdownMenuItem>Archive all cards in list</DropdownMenuItem>
