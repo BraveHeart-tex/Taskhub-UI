@@ -43,7 +43,7 @@
   --sidebar-border: oklch(0.88 0.006 250);
   --sidebar-ring: oklch(0.65 0.14 245);
 
-  --radius: 0.6rem;
+  --radius: 0.5rem;
 }
 
 .dark {
