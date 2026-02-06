@@ -11,7 +11,7 @@ export const Route = createFileRoute(
   loader: async ({ params }) => {
     const result = await getBoardContext({
       boardId: params.boardId,
-      workspaceId: params.boardId,
+      workspaceId: params.workspaceId,
     });
 
     if (!result.ok) {
@@ -26,7 +26,7 @@ export const Route = createFileRoute(
 function WorkspaceBoardPage() {
   const { board } = Route.useLoaderData();
   return (
-    <div className='flex h-full flex-col gap-4'>
+    <div className='flex flex-1 min-h-0 flex-col gap-4'>
       <div className='space-y-1'>
         <div className='flex items-center gap-2'>
           <H2>{board.title}</H2>
