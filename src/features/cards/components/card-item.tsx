@@ -15,11 +15,11 @@ interface CardItemProps {
 export function CardItem({ card, user }: CardItemProps) {
   return (
     <Card>
-      <CardContent className='p-3 space-y-2'>
+      <CardContent className='space-y-2'>
         <div className='text-sm font-medium'>{card.title}</div>
 
         {card.description && (
-          <div className='text-xs text-muted-foreground'>
+          <div className='text-sm text-muted-foreground'>
             {card.description}
           </div>
         )}
