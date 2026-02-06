@@ -23,7 +23,7 @@ export function ListColumn({ list, users }: ListColumnProps) {
           <ListActions onAddCard={() => setIsAddingCard(true)} />
         </div>
 
-        <div className='flex-1 space-y-2 overflow-y-auto px-3'>
+        <div className='flex-1 space-y-2 overflow-y-auto px-1 py-0.5'>
           {list.cards.map((card) => (
             <CardItem key={card.id} card={card} user={users[card.createdBy]} />
           ))}
