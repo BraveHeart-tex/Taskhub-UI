@@ -24,8 +24,8 @@ export function ListColumn({ list, users }: ListColumnProps) {
           <ListActions onAddCard={() => setIsAddingCard(true)} />
         </div>
 
-        <ScrollArea className='flex-1 min-h-0 px-1'>
-          <div className='space-y-2 p-0.5'>
+        <ScrollArea className='flex-1 min-h-0 group'>
+          <div className='space-y-2 p-0.5 px-1 group-data-has-overflow-y:pr-1.75'>
             {list.cards.map((card) => (
               <CardItem
                 key={card.id}
