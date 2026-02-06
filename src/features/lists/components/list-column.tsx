@@ -2,6 +2,7 @@ import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import type { BoardContent } from '@/features/boards/board.schema';
 import { CardItem } from '@/features/cards/components/card-item';
 import { NewCardComposer } from '../cards/components/new-card-composer';
@@ -17,26 +18,32 @@ export function ListColumn({ list, users }: ListColumnProps) {
 
   return (
     <article className='w-72 shrink-0'>
-      <Card className='flex h-full flex-col rounded-xl bg-muted/50'>
+      <Card className='flex h-full min-h-0 flex-col rounded-xl bg-muted/50'>
         <div className='flex items-center justify-between px-3'>
           <h3 className='text-sm font-semibold leading-none'>{list.title}</h3>
           <ListActions onAddCard={() => setIsAddingCard(true)} />
         </div>
 
-        <div className='flex-1 space-y-2 overflow-y-auto px-1 py-0.5'>
-          {list.cards.map((card) => (
-            <CardItem key={card.id} card={card} user={users[card.createdBy]} />
-          ))}
+        <ScrollArea className='flex-1 min-h-0 px-1'>
+          <div className='space-y-2 p-0.5'>
+            {list.cards.map((card) => (
+              <CardItem
+                key={card.id}
+                card={card}
+                user={users[card.createdBy]}
+              />
+            ))}
 
-          {isAddingCard && (
-            <NewCardComposer
-              onCancel={() => setIsAddingCard(false)}
-              listId={list.id}
-            />
-          )}
-        </div>
+            {isAddingCard && (
+              <NewCardComposer
+                onCancel={() => setIsAddingCard(false)}
+                listId={list.id}
+              />
+            )}
+          </div>
+        </ScrollArea>
 
-        <div className='px-2'>
+        <div className='shrink-0 px-2'>
           {!isAddingCard && (
             <Button
               variant='ghost'
