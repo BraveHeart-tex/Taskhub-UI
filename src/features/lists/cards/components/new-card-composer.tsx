@@ -62,6 +62,12 @@ export function NewCardComposer({
   });
 
   useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'instant' });
+    }
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
         onCancel();
