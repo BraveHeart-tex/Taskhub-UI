@@ -18,7 +18,7 @@ export function ListColumn({ list, users }: ListColumnProps) {
 
   return (
     <article className='w-72 shrink-0'>
-      <Card className='flex h-full min-h-0 flex-col rounded-xl bg-muted/50'>
+      <Card className='flex min-h-0 flex-col rounded-xl bg-muted/50'>
         <div className='flex items-center justify-between px-3'>
           <h3 className='text-sm font-semibold leading-none'>{list.title}</h3>
           <ListActions onAddCard={() => setIsAddingCard(true)} />
