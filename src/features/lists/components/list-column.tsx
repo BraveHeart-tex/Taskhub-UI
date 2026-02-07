@@ -25,21 +25,23 @@ export function ListColumn({ list, users }: ListColumnProps) {
         </div>
 
         <ScrollArea className='flex-1 min-h-0 group'>
-          <div className='space-y-2 p-0.5 px-1 group-data-has-overflow-y:pr-1.75'>
-            {list.cards.map((card) => (
-              <CardItem
-                key={card.id}
-                card={card}
-                user={users[card.createdBy]}
-              />
-            ))}
+          <div className='max-h-[calc(100vh-18.5rem)]'>
+            <div className='space-y-2 p-0.5 px-1 group-data-has-overflow-y:pr-1.75 '>
+              {list.cards.map((card) => (
+                <CardItem
+                  key={card.id}
+                  card={card}
+                  user={users[card.createdBy]}
+                />
+              ))}
 
-            {isAddingCard && (
-              <NewCardComposer
-                onCancel={() => setIsAddingCard(false)}
-                listId={list.id}
-              />
-            )}
+              {isAddingCard && (
+                <NewCardComposer
+                  onCancel={() => setIsAddingCard(false)}
+                  listId={list.id}
+                />
+              )}
+            </div>
           </div>
         </ScrollArea>
 
