@@ -1,3 +1,4 @@
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Muted } from '@/components/ui/typography';
 import { AddListForm } from '@/features/lists/components/add-list-form';
 import { ListColumn } from '@/features/lists/components/list-column';
@@ -20,11 +21,14 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   }
 
   return (
-    <div className='flex flex-1 min-h-0 gap-4 overflow-x-auto pb-4 pt-px px-px'>
-      {data.lists.map((list) => (
-        <ListColumn key={list.id} list={list} users={data.users} />
-      ))}
-      <AddListForm label={'Add Another List'} />
-    </div>
+    <ScrollArea className='flex-1 min-h-0 min-w-0'>
+      <div className='flex w-[calc(100vw-0px)] gap-4 pb-4 pt-px px-px'>
+        {data.lists.map((list) => (
+          <ListColumn key={list.id} list={list} users={data.users} />
+        ))}
+        <AddListForm label={'Add Another List'} />
+      </div>
+      <ScrollBar orientation='horizontal' />
+    </ScrollArea>
   );
 }
