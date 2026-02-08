@@ -9,7 +9,8 @@ export const createCardFormSchema = z.object({
   title: z
     .string()
     .min(2, 'Title must be at least 2 characters long')
-    .max(100, 'Title must be at most 100 characters long'),
+    .max(100, 'Title must be at most 100 characters long')
+    .transform((v) => v.replace(/\r?\n|\r/g, ' ')),
 });
 
 export const cardDtoSchema = z.object({

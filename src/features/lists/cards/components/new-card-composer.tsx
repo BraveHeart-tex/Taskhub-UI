@@ -1,15 +1,9 @@
 import { useForm } from '@tanstack/react-form';
-import { useParams } from '@tanstack/react-router';
 import { XIcon } from 'lucide-react';
-import { type FormEvent, useEffect, useRef } from 'react';
+import { type FormEvent, type KeyboardEvent, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Textarea } from '@/components/ui/textarea';
 import { useCreateCard } from '../card.mutation';
 import { createCardFormSchema } from '../card.schema';
 
@@ -17,17 +11,19 @@ interface NewCardComposerProps {
   onCancel: () => void;
   onConfirm?: (title: string) => void;
   listId: string;
+  workspaceId: string;
+  boardId: string;
 }
 
 export function NewCardComposer({
   onCancel,
   onConfirm,
   listId,
+  workspaceId,
+  boardId,
 }: NewCardComposerProps) {
   const createCardMutation = useCreateCard();
-  const params = useParams({
-    from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
-  });
+
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm({
@@ -39,9 +35,9 @@ export function NewCardComposer({
     },
     onSubmit: async ({ value }) => {
       const result = await createCardMutation.mutateAsync({
-        boardId: params.boardId,
+        boardId,
         title: value.title,
-        workspaceId: params.workspaceId,
+        workspaceId,
         listId,
       });
 
@@ -88,6 +84,30 @@ export function NewCardComposer({
     void form.handleSubmit();
   };
 
+  const handleKeydown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    const value = form.getFieldValue('title');
+
+    if (event.key === 'Enter') {
+      if (value.trim().length > 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.handleSubmit({ title: value });
+      } else {
+        event.preventDefault();
+        event.stopPropagation();
+        onCancel();
+        form.reset();
+      }
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      onCancel();
+      form.reset();
+    }
+  };
+
   return (
     <form
       id='create-card-form'
@@ -106,26 +126,21 @@ export function NewCardComposer({
                 <FieldLabel htmlFor={field.name} className='sr-only'>
                   Card Title
                 </FieldLabel>
-                <Input
+                <Textarea
                   id={field.name}
                   name={field.name}
-                  type='text'
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Escape') {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      onCancel();
-                      form.reset();
-                    }
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\r?\n|\r/g, ' ');
+                    field.handleChange(value);
                   }}
+                  onKeyDown={handleKeydown}
                   aria-invalid={isInvalid}
                   placeholder='Enter card title...'
-                  autoFocus
+                  rows={1}
+                  className='resize-none bg-card leading-snug'
                 />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             );
           }}

@@ -1,7 +1,7 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Muted } from '@/components/ui/typography';
-import { AddListForm } from '@/features/lists/components/add-list-form';
 import { ListColumn } from '@/features/lists/components/list-column';
+import { NewListComposer } from '@/features/lists/components/new-list-composer';
 import { useBoardContent } from '../board.queries';
 
 interface BoardContentProps {
@@ -17,7 +17,13 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   }
 
   if (!data || data.lists.length === 0) {
-    return <AddListForm label={'Add List'} />;
+    return (
+      <NewListComposer
+        label={'Add List'}
+        workspaceId={workspaceId}
+        boardId={boardId}
+      />
+    );
   }
 
   return (
@@ -26,7 +32,11 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
         {data.lists.map((list) => (
           <ListColumn key={list.id} list={list} users={data.users} />
         ))}
-        <AddListForm label={'Add Another List'} />
+        <NewListComposer
+          label={'Add Another List'}
+          workspaceId={workspaceId}
+          boardId={boardId}
+        />
       </div>
       <ScrollBar orientation='horizontal' />
     </ScrollArea>

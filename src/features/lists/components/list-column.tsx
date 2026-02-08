@@ -1,3 +1,4 @@
+import { useParams } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,9 @@ interface ListColumnProps {
 }
 
 export function ListColumn({ list, users }: ListColumnProps) {
+  const params = useParams({
+    from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
+  });
   const [isAddingCard, setIsAddingCard] = useState(false);
 
   return (
@@ -38,6 +42,8 @@ export function ListColumn({ list, users }: ListColumnProps) {
                 <NewCardComposer
                   onCancel={() => setIsAddingCard(false)}
                   listId={list.id}
+                  workspaceId={params.workspaceId}
+                  boardId={params.boardId}
                 />
               )}
             </div>

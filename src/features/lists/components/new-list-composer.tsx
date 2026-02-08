@@ -1,7 +1,12 @@
 import { useForm } from '@tanstack/react-form';
-import { useParams } from '@tanstack/react-router';
 import { PlusIcon, XIcon } from 'lucide-react';
-import { type FormEvent, useEffect, useRef, useState } from 'react';
+import {
+  type FormEvent,
+  type KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -10,17 +15,25 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useCreateList } from '../list.mutations';
 import { createListFormSchema } from '../list.schema';
 
-export function AddListForm({ label }: { label: string }) {
+interface NewListComposerProps {
+  label: string;
+  workspaceId: string;
+  boardId: string;
+}
+
+export function NewListComposer({
+  label,
+  boardId,
+  workspaceId,
+}: NewListComposerProps) {
   const createListMutation = useCreateList();
-  const params = useParams({
-    from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
-  });
   const [showForm, setShowForm] = useState(false);
   const formCardRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm({
     defaultValues: {
@@ -32,12 +45,13 @@ export function AddListForm({ label }: { label: string }) {
     onSubmit: async ({ value }) => {
       const result = await createListMutation.mutateAsync({
         title: value.title,
-        boardId: params.boardId,
-        workspaceId: params.workspaceId,
+        boardId,
+        workspaceId,
       });
 
       if (result.ok) {
         form.reset();
+        titleRef.current?.focus();
       }
     },
     onSubmitInvalid: () => {
@@ -75,6 +89,30 @@ export function AddListForm({ label }: { label: string }) {
     void form.handleSubmit();
   };
 
+  const handleKeydown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    const value = form.getFieldValue('title');
+
+    if (event.key === 'Enter') {
+      if (value.trim().length > 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.handleSubmit({ title: value });
+      } else {
+        event.preventDefault();
+        event.stopPropagation();
+        setShowForm(false);
+        form.reset();
+      }
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      setShowForm(false);
+      form.reset();
+    }
+  };
+
   if (showForm) {
     return (
       <Card className='w-72 shrink-0 h-max py-2' ref={formCardRef}>
@@ -91,24 +129,25 @@ export function AddListForm({ label }: { label: string }) {
                       <FieldLabel htmlFor={field.name} className='sr-only'>
                         List Title
                       </FieldLabel>
-                      <Input
+                      <Textarea
                         id={field.name}
                         name={field.name}
-                        type='text'
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Escape') {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            setShowForm(false);
-                            form.reset();
-                          }
+                        onChange={(e) => {
+                          const value = e.target.value.replace(
+                            /\r?\n|\r/g,
+                            ' '
+                          );
+                          field.handleChange(value);
                         }}
+                        onKeyDown={handleKeydown}
                         aria-invalid={isInvalid}
                         placeholder='Enter list title...'
+                        rows={1}
+                        className='resize-none bg-card leading-snug'
                         autoFocus
+                        ref={titleRef}
                       />
                       {isInvalid && (
                         <FieldError errors={field.state.meta.errors} />
