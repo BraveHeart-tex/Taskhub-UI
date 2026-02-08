@@ -46,6 +46,7 @@ export const boardContextSchema = z.object({
     canDeleteBoard: z.boolean(),
     canManageMembers: z.boolean(),
   }),
+  isFavorite: z.boolean(),
 });
 
 export type BoardContext = z.infer<typeof boardContextSchema>;

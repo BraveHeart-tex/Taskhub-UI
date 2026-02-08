@@ -50,7 +50,7 @@ export function BoardTitle({ title, onUpdate }: BoardTitleProps) {
   }
 
   return (
-    <div className='group flex items-center cursor-pointer rounded-md border border-transparent hover:bg-muted/50 transition-colors px-2 -ml-2 h-8'>
+    <div className='group flex items-center cursor-pointer rounded-md border border-transparent hover:bg-muted/50 transition-colors px-2 -ml-2'>
       <Typography
         variant='h3'
         as='h1'
