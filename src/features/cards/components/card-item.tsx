@@ -24,7 +24,7 @@ export function CardItem({ card, user }: CardItemProps) {
           {user && (
             <div className='flex items-center gap-2 pt-2 ml-auto'>
               <Avatar className='h-6 w-6'>
-                <AvatarFallback className='text-[9px] font-semibold'>
+                <AvatarFallback className='text-xs font-semibold'>
                   {user.fullName[0]}
                 </AvatarFallback>
               </Avatar>
