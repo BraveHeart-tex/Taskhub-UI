@@ -7,7 +7,7 @@ import { UserMenu } from '@/components/user-menu';
 export function AppLayout() {
   return (
     <div className='fixed inset-0 flex flex-col overflow-hidden'>
-      <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
+      <header className='flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4'>
         <Link to='/boards' className='flex items-center gap-2 select-none'>
           <SquareKanbanIcon className='size-5' />
           <Large className='tracking-tight leading-none'>Taskhub</Large>
