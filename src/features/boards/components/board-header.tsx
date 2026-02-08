@@ -1,19 +1,21 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useLoaderData } from '@tanstack/react-router';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useParams } from '@tanstack/react-router';
 import { Badge } from '@/components/ui/badge';
 import { useBoardFavoriteToggle } from '@/features/board-favorite/board-favorite.hooks';
 import { queryKeys } from '@/lib/query-keys';
+import { boardContextQuery } from '../board.queries';
 import type { BoardContext } from '../board.schema';
 import { BoardTitle } from './board-title';
 import { FavoriteBoardButton } from './favorite-board-button';
 
 export function BoardHeader() {
-  const board = useLoaderData({
+  const { workspaceId, boardId } = useParams({
     from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
   });
+  const { data: board } = useQuery(boardContextQuery({ workspaceId, boardId }));
 
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.boards.byId(board.id);
+  const queryKey = board?.id ? queryKeys.boards.byId(board?.id) : [];
 
   const createMutationOptions = (action: 'add' | 'remove') => ({
     onMutate: async (boardId: string) => {
@@ -50,6 +52,8 @@ export function BoardHeader() {
     onFavorite: createMutationOptions('add'),
     onUnfavorite: createMutationOptions('remove'),
   });
+
+  if (!board) return null;
 
   return (
     <div className='space-y-1 h-8'>
