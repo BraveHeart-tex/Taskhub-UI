@@ -1,45 +1,32 @@
 import { StarIcon } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  useFavoriteBoard,
-  useUnfavoriteBoard,
-} from '@/features/board-favorite/board-favorite.hooks';
 import { cn } from '@/lib/utils';
 
 interface FavoriteBoardButtonProps {
   isFavorite: boolean;
   boardId: string;
+  isLoading: boolean;
+  toggle: (boardId: string, isFavorite: boolean) => void;
 }
 
 export function FavoriteBoardButton({
   isFavorite,
   boardId,
+  isLoading,
+  toggle,
 }: FavoriteBoardButtonProps) {
-  const favoriteBoardMutation = useFavoriteBoard();
-  const unfavoriteBoardMutation = useUnfavoriteBoard();
-
-  const isLoading =
-    favoriteBoardMutation.isPending || unfavoriteBoardMutation.isPending;
-
-  const handleFavoriteClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     event.preventDefault();
-
-    if (isLoading) return;
-
-    if (isFavorite) {
-      unfavoriteBoardMutation.mutate(boardId);
-    } else {
-      favoriteBoardMutation.mutate(boardId);
-    }
+    toggle(boardId, !isFavorite);
   };
 
   return (
     <Button
       size='icon'
       variant='ghost'
-      onClick={handleFavoriteClick}
+      onClick={handleClick}
       disabled={isLoading}
       aria-pressed={isFavorite}
     >

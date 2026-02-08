@@ -11,7 +11,7 @@ export function optimisticallyUpdateFavorite(
 ) {
   const queryKey = queryKeys.me.dashboard();
 
-  const previous = queryClient.getQueryData<Dashboard>(queryKey);
+  const previousDashboard = queryClient.getQueryData<Dashboard>(queryKey);
 
   queryClient.setQueryData<Dashboard>(queryKey, (prev) => {
     if (!prev) return prev;
@@ -30,5 +30,5 @@ export function optimisticallyUpdateFavorite(
     };
   });
 
-  return { previous };
+  return { previousDashboard };
 }
