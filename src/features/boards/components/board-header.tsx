@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { Badge } from '@/components/ui/badge';
 import { useBoardFavoriteToggle } from '@/features/board-favorite/board-favorite.hooks';
+import type { Dashboard } from '@/features/dashboard/dashboard.schema';
 import { queryKeys } from '@/lib/query-keys';
 import { boardContextQuery } from '../board.queries';
 import type { BoardContext } from '../board.schema';
@@ -15,14 +16,22 @@ export function BoardHeader() {
   const { data: board } = useQuery(boardContextQuery({ workspaceId, boardId }));
 
   const queryClient = useQueryClient();
-  const queryKey = board?.id ? queryKeys.boards.byId(board?.id) : [];
+  const dashboardQueryKey = queryKeys.me.dashboard();
+  const boardQueryKey = board?.id ? queryKeys.boards.byId(board?.id) : [];
 
   const createMutationOptions = (action: 'add' | 'remove') => ({
     onMutate: async (boardId: string) => {
-      await queryClient.cancelQueries({ queryKey });
-      const previousBoard = queryClient.getQueryData<BoardContext>(queryKey);
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: boardQueryKey }),
+        queryClient.cancelQueries({ queryKey: dashboardQueryKey }),
+      ]);
 
-      queryClient.setQueryData<BoardContext>(queryKey, (prev) =>
+      const previousBoard =
+        queryClient.getQueryData<BoardContext>(boardQueryKey);
+      const previousDashboard =
+        queryClient.getQueryData<Dashboard>(dashboardQueryKey);
+
+      queryClient.setQueryData<BoardContext>(boardQueryKey, (prev) =>
         prev
           ? {
               ...prev,
@@ -32,22 +41,45 @@ export function BoardHeader() {
           : undefined
       );
 
-      return { previousBoard };
+      queryClient.setQueryData<Dashboard>(dashboardQueryKey, (prev) =>
+        prev
+          ? {
+              ...prev,
+              favorites:
+                action === 'add'
+                  ? [...prev.favorites, boardId]
+                  : prev.favorites.filter((id) => id !== boardId),
+              boards: prev.boards.map((board) => ({
+                ...board,
+                isFavorited:
+                  board.id === boardId ? action === 'add' : board.isFavorited,
+              })),
+            }
+          : prev
+      );
+
+      return { previousBoard, previousDashboard };
     },
     onError: (
       _err: Error,
       _boardId: string,
-      ctx?: { previousBoard: BoardContext | undefined }
+      ctx?: {
+        previousBoard: BoardContext | undefined;
+        previousDashboard: Dashboard | undefined;
+      }
     ) => {
-      queryClient.setQueryData(queryKey, ctx?.previousBoard);
+      queryClient.setQueryData(boardQueryKey, ctx?.previousBoard);
+      queryClient.setQueryData(dashboardQueryKey, ctx?.previousDashboard);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: boardQueryKey });
+      queryClient.invalidateQueries({ queryKey: dashboardQueryKey });
     },
   });
 
   const { toggle, isLoading } = useBoardFavoriteToggle<{
     previousBoard: BoardContext | undefined;
+    previousDashboard: Dashboard | undefined;
   }>({
     onFavorite: createMutationOptions('add'),
     onUnfavorite: createMutationOptions('remove'),
