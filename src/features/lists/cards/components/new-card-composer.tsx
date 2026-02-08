@@ -140,6 +140,7 @@ export function NewCardComposer({
                   placeholder='Enter card title...'
                   rows={1}
                   className='resize-none bg-card leading-snug'
+                  autoFocus
                 />
               </Field>
             );
