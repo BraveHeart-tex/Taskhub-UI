@@ -1,6 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
-import { type RefObject, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -23,9 +23,11 @@ export function ListColumn({ list, users }: ListColumnProps) {
 
   return (
     <article className='w-72 shrink-0'>
-      <Card className='flex min-h-0 flex-col rounded-xl bg-muted/50'>
+      <Card className='flex min-h-0 flex-col rounded-xl bg-column'>
         <div className='flex items-center justify-between px-3'>
-          <h3 className='text-sm font-semibold leading-none'>{list.title}</h3>
+          <h3 className='text-sm font-semibold leading-none text-column-foreground'>
+            {list.title}
+          </h3>
           <ListActions onAddCard={() => setIsAddingCard(true)} />
         </div>
 
@@ -45,9 +47,7 @@ export function ListColumn({ list, users }: ListColumnProps) {
                   listId={list.id}
                   workspaceId={params.workspaceId}
                   boardId={params.boardId}
-                  scrollContainerRef={
-                    scrollContainerRef as RefObject<HTMLDivElement>
-                  }
+                  scrollContainerRef={scrollContainerRef}
                 />
               )}
             </div>
@@ -58,7 +58,7 @@ export function ListColumn({ list, users }: ListColumnProps) {
           {!isAddingCard && (
             <Button
               variant='ghost'
-              className='w-full justify-start gap-2 text-muted-foreground'
+              className='w-full justify-start gap-2 text-muted-foreground hover:bg-accent hover:text-column-foreground'
               onClick={() => setIsAddingCard(true)}
             >
               <PlusIcon />

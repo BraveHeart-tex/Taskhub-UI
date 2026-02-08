@@ -14,24 +14,23 @@ interface CardItemProps {
 
 export function CardItem({ card, user }: CardItemProps) {
   return (
-    <Card>
+    <Card className='group cursor-pointer border-none bg-card shadow-sm transition-shadow hover:shadow-md'>
       <CardContent className='space-y-2'>
-        <div className='text-sm font-medium'>{card.title}</div>
+        <div className='text-sm leading-snug text-card-foreground'>
+          {card.title}
+        </div>
 
-        {card.description && (
-          <div className='text-sm text-muted-foreground'>
-            {card.description}
-          </div>
-        )}
-
-        {user && (
-          <div className='flex items-center gap-2 pt-2'>
-            <Avatar className='h-6 w-6'>
-              <AvatarFallback>{user.fullName[0]}</AvatarFallback>
-            </Avatar>
-            <span className='text-xs'>{user.fullName}</span>
-          </div>
-        )}
+        <div className='flex -space-x-1.5'>
+          {user && (
+            <div className='flex items-center gap-2 pt-2 ml-auto'>
+              <Avatar className='h-6 w-6'>
+                <AvatarFallback className='text-[9px] font-semibold'>
+                  {user.fullName[0]}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

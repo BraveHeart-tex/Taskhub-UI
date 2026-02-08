@@ -18,7 +18,11 @@ export function ListActions({ onAddCard }: ListActionsProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant='ghost' size='icon' className='h-7 w-7'>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='h-7 w-7 hover:bg-accent hover:text-column-foreground'
+          >
             <MoreHorizontalIcon />
           </Button>
         }
