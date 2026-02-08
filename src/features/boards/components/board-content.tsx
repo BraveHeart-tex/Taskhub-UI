@@ -16,14 +16,8 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
     return <Muted className='text-center'>Loading board…</Muted>;
   }
 
-  if (!data || data.lists.length === 0) {
-    return (
-      <NewListComposer
-        label={'Add List'}
-        workspaceId={workspaceId}
-        boardId={boardId}
-      />
-    );
+  if (!data) {
+    return null;
   }
 
   return (
