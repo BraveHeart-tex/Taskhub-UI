@@ -13,7 +13,10 @@ export function BoardHeader() {
       <div className='flex items-center gap-1'>
         <div className='flex items-center'>
           <BoardTitle title={board.title} />
-          <FavoriteBoardButton isFavorite={board.isFavorite} />
+          <FavoriteBoardButton
+            isFavorite={board.isFavorite}
+            boardId={board.id}
+          />
         </div>
         <Badge variant={board.myRole === 'owner' ? 'default' : 'secondary'}>
           {board.myRole === 'owner' ? 'Owner' : 'Member'}
