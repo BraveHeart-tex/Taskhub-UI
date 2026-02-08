@@ -25,7 +25,10 @@ export const boardContextQuery = ({ workspaceId, boardId }: BoardRouteParams) =>
         workspaceId,
       }).then((r) => {
         if (!r.ok)
-          throw redirect({ to: '/workspaces/$workspaceId/boards', params });
+          throw redirect({
+            to: '/workspaces/$workspaceId/boards',
+            params: { workspaceId },
+          });
         return r.value;
       }),
   });

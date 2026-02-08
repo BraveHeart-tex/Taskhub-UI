@@ -30,5 +30,5 @@ export function optimisticallyUpdateFavorite(
     };
   });
 
-  return { previousDashboard };
+  return previousDashboard;
 }

@@ -28,7 +28,7 @@ export function BoardGrid({ boards }: BoardGridProps) {
         >
           <BoardTile
             isFavorited={board.isFavorited}
-            id={board.id}
+            boardId={board.id}
             title={board.title}
             workspaceId={board.workspaceId}
           />
