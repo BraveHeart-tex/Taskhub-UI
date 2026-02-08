@@ -1,9 +1,10 @@
-import { useForm } from '@tanstack/react-form';
+import { useForm, useStore } from '@tanstack/react-form';
 import { XIcon } from 'lucide-react';
-import { type FormEvent, type KeyboardEvent, useEffect, useRef } from 'react';
+import type { FormEvent, Ref } from 'react';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
+import { useComposerPrimitive } from '@/lib/hooks/use-composer-primitive';
 import { useCreateCard } from '../card.mutation';
 import { createCardFormSchema } from '../card.schema';
 
@@ -23,8 +24,6 @@ export function NewCardComposer({
   boardId,
 }: NewCardComposerProps) {
   const createCardMutation = useCreateCard();
-
-  const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm({
     defaultValues: {
@@ -57,26 +56,17 @@ export function NewCardComposer({
     },
   });
 
-  useEffect(() => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'instant' });
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        onCancel();
-        form.reset();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside, true);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside, true);
-    };
-  }, [onCancel, form]);
+  const { containerRef, handleKeyDown } = useComposerPrimitive({
+    value: useStore(form.store, (store) => store.values.title),
+    onConfirm: (title) => {
+      form.handleSubmit({ title });
+    },
+    onReset: () => {
+      form.reset();
+    },
+    onCancel,
+    scrollIntoView: true,
+  });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -84,36 +74,12 @@ export function NewCardComposer({
     void form.handleSubmit();
   };
 
-  const handleKeydown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    const value = form.getFieldValue('title');
-
-    if (event.key === 'Enter') {
-      if (value.trim().length > 0) {
-        event.preventDefault();
-        event.stopPropagation();
-        form.handleSubmit({ title: value });
-      } else {
-        event.preventDefault();
-        event.stopPropagation();
-        onCancel();
-        form.reset();
-      }
-    }
-
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-      onCancel();
-      form.reset();
-    }
-  };
-
   return (
     <form
       id='create-card-form'
       onSubmit={onSubmit}
       className='space-y-1'
-      ref={formRef}
+      ref={containerRef as Ref<HTMLFormElement>}
     >
       <FieldGroup>
         <form.Field name='title'>
@@ -135,7 +101,7 @@ export function NewCardComposer({
                     const value = e.target.value.replace(/\r?\n|\r/g, ' ');
                     field.handleChange(value);
                   }}
-                  onKeyDown={handleKeydown}
+                  onKeyDown={handleKeyDown}
                   aria-invalid={isInvalid}
                   placeholder='Enter card title...'
                   rows={1}

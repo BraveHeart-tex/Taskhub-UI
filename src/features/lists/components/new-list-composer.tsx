@@ -1,12 +1,6 @@
-import { useForm } from '@tanstack/react-form';
+import { useForm, useStore } from '@tanstack/react-form';
 import { PlusIcon, XIcon } from 'lucide-react';
-import {
-  type FormEvent,
-  type KeyboardEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { type FormEvent, type Ref, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -16,6 +10,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
+import { useComposerPrimitive } from '@/lib/hooks/use-composer-primitive';
 import { useCreateList } from '../list.mutations';
 import { createListFormSchema } from '../list.schema';
 
@@ -32,7 +27,6 @@ export function NewListComposer({
 }: NewListComposerProps) {
   const createListMutation = useCreateList();
   const [showForm, setShowForm] = useState(false);
-  const formCardRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm({
@@ -55,33 +49,22 @@ export function NewListComposer({
       }
     },
     onSubmitInvalid: () => {
-      const InvalidInput = document.querySelector(
+      const invalidInput = document.querySelector(
         '[aria-invalid="true"]'
       ) as HTMLInputElement;
 
-      InvalidInput?.focus();
+      invalidInput?.focus();
     },
   });
 
-  useEffect(() => {
-    if (!showForm) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        formCardRef.current &&
-        !formCardRef.current.contains(event.target as Node)
-      ) {
-        setShowForm(false);
-        form.reset();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside, true);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside, true);
-    };
-  }, [showForm, form]);
+  const { containerRef, handleKeyDown } = useComposerPrimitive({
+    value: useStore(form.store, (store) => store.values.title),
+    onConfirm: (title) => {
+      form.handleSubmit({ title });
+    },
+    onCancel: () => setShowForm(false),
+    onReset: () => form.reset(),
+  });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -89,33 +72,12 @@ export function NewListComposer({
     void form.handleSubmit();
   };
 
-  const handleKeydown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    const value = form.getFieldValue('title');
-
-    if (event.key === 'Enter') {
-      if (value.trim().length > 0) {
-        event.preventDefault();
-        event.stopPropagation();
-        form.handleSubmit({ title: value });
-      } else {
-        event.preventDefault();
-        event.stopPropagation();
-        setShowForm(false);
-        form.reset();
-      }
-    }
-
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-      setShowForm(false);
-      form.reset();
-    }
-  };
-
   if (showForm) {
     return (
-      <Card className='w-72 shrink-0 h-max py-2' ref={formCardRef}>
+      <Card
+        className='w-72 shrink-0 h-max py-2'
+        ref={containerRef as Ref<HTMLDivElement>}
+      >
         <CardContent className='max-h-max'>
           <form id='create-list-form' onSubmit={onSubmit} className='space-y-1'>
             <FieldGroup>
@@ -141,7 +103,7 @@ export function NewListComposer({
                           );
                           field.handleChange(value);
                         }}
-                        onKeyDown={handleKeydown}
+                        onKeyDown={handleKeyDown}
                         aria-invalid={isInvalid}
                         placeholder='Enter list title...'
                         rows={1}
