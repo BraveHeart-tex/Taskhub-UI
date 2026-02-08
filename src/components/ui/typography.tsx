@@ -28,6 +28,7 @@ const typographyVariants = cva('', {
       left: 'text-left',
       center: 'text-center',
       right: 'text-right',
+      justify: 'text-justify',
     },
     color: {
       default: '',
@@ -44,22 +45,9 @@ const typographyVariants = cva('', {
   },
 });
 
-type VariantElement = {
-  h1: 'h1';
-  h2: 'h2';
-  h3: 'h3';
-  h4: 'h4';
-  p: 'p';
-  lead: 'p';
-  large: 'p';
-  small: 'p';
-  muted: 'p';
-  caption: 'span';
-  blockquote: 'blockquote';
-  code: 'code';
-};
+type VariantKey = keyof typeof variantElementMap;
 
-const variantElementMap: VariantElement = {
+const variantElementMap = {
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
@@ -72,7 +60,7 @@ const variantElementMap: VariantElement = {
   caption: 'span',
   blockquote: 'blockquote',
   code: 'code',
-};
+} as const;
 
 type AllowedElements =
   | 'h1'
@@ -110,12 +98,18 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
     },
     ref
   ) => {
-    const Component = as || variantElementMap[variant || 'p'];
+    const Component = as || variantElementMap[variant as VariantKey];
 
     return React.createElement(
       Component,
       {
-        ref,
+        ref: ref as React.Ref<
+          HTMLElement &
+            HTMLParagraphElement &
+            HTMLHeadingElement &
+            HTMLQuoteElement &
+            HTMLSpanElement
+        >,
         className: cn(
           typographyVariants({ variant, weight, align, color }),
           balance && 'text-balance',
@@ -127,111 +121,30 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
     );
   }
 );
+
 Typography.displayName = 'Typography';
 
-// Convenient shorthand components for common use cases
-const H1 = React.forwardRef<
-  HTMLHeadingElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='h1' {...props} />
-));
-H1.displayName = 'H1';
+function createTypographyShorthand<T extends VariantKey>(variant: T) {
+  const Component = React.forwardRef<
+    HTMLElement,
+    Omit<TypographyProps, 'variant'>
+  >((props, ref) => <Typography ref={ref} variant={variant} {...props} />);
+  Component.displayName = variant.charAt(0).toUpperCase() + variant.slice(1);
+  return Component;
+}
 
-const H2 = React.forwardRef<
-  HTMLHeadingElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='h2' {...props} />
-));
-H2.displayName = 'H2';
-
-const H3 = React.forwardRef<
-  HTMLHeadingElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='h3' {...props} />
-));
-H3.displayName = 'H3';
-
-const H4 = React.forwardRef<
-  HTMLHeadingElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='h4' {...props} />
-));
-H4.displayName = 'H4';
-
-const Paragraph = React.forwardRef<
-  HTMLParagraphElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='p' {...props} />
-));
-Paragraph.displayName = 'Paragraph';
-
-const Lead = React.forwardRef<
-  HTMLParagraphElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='lead' {...props} />
-));
-Lead.displayName = 'Lead';
-
-const Large = React.forwardRef<
-  HTMLParagraphElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='large' {...props} />
-));
-Large.displayName = 'Large';
-
-const Small = React.forwardRef<
-  HTMLParagraphElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='small' {...props} />
-));
-Small.displayName = 'Small';
-
-const Muted = React.forwardRef<
-  HTMLParagraphElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography ref={ref as React.Ref<HTMLElement>} variant='muted' {...props} />
-));
-Muted.displayName = 'Muted';
-
-const Caption = React.forwardRef<
-  HTMLSpanElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography
-    ref={ref as React.Ref<HTMLElement>}
-    variant='caption'
-    {...props}
-  />
-));
-Caption.displayName = 'Caption';
-
-const Blockquote = React.forwardRef<
-  HTMLQuoteElement,
-  Omit<TypographyProps, 'variant'>
->((props, ref) => (
-  <Typography
-    ref={ref as React.Ref<HTMLElement>}
-    variant='blockquote'
-    {...props}
-  />
-));
-Blockquote.displayName = 'Blockquote';
-
-const Code = React.forwardRef<HTMLElement, Omit<TypographyProps, 'variant'>>(
-  (props, ref) => (
-    <Typography ref={ref as React.Ref<HTMLElement>} variant='code' {...props} />
-  )
-);
-Code.displayName = 'Code';
+const H1 = createTypographyShorthand('h1');
+const H2 = createTypographyShorthand('h2');
+const H3 = createTypographyShorthand('h3');
+const H4 = createTypographyShorthand('h4');
+const Paragraph = createTypographyShorthand('p');
+const Lead = createTypographyShorthand('lead');
+const Large = createTypographyShorthand('large');
+const Small = createTypographyShorthand('small');
+const Muted = createTypographyShorthand('muted');
+const Caption = createTypographyShorthand('caption');
+const Blockquote = createTypographyShorthand('blockquote');
+const Code = createTypographyShorthand('code');
 
 export {
   Typography,

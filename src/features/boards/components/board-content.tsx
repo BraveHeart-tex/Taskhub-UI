@@ -1,4 +1,4 @@
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Muted } from '@/components/ui/typography';
 import { ListColumn } from '@/features/lists/components/list-column';
 import { NewListComposer } from '@/features/lists/components/new-list-composer';
@@ -21,8 +21,8 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   }
 
   return (
-    <ScrollArea className='flex-1 min-h-0 min-w-0'>
-      <div className='flex w-[calc(100vw-0px)] gap-4 pb-4 pt-px px-px'>
+    <ScrollArea>
+      <div className='flex gap-4 pb-4 pt-px px-px'>
         {data.lists.map((list) => (
           <ListColumn key={list.id} list={list} users={data.users} />
         ))}
@@ -32,7 +32,6 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
           boardId={boardId}
         />
       </div>
-      <ScrollBar orientation='horizontal' />
     </ScrollArea>
   );
 }
