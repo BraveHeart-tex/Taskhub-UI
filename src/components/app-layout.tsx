@@ -17,7 +17,7 @@ export function AppLayout() {
           <ModeSwitch />
         </div>
       </header>
-      <main className='flex-1 min-h-0 p-4'>
+      <main className='flex flex-1 p-4 flex-col'>
         <Outlet />
       </main>
     </div>

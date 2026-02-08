@@ -1,4 +1,4 @@
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Muted } from '@/components/ui/typography';
 import { ListColumn } from '@/features/lists/components/list-column';
 import { NewListComposer } from '@/features/lists/components/new-list-composer';
@@ -32,6 +32,7 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
           boardId={boardId}
         />
       </div>
+      <ScrollBar orientation='horizontal' />
     </ScrollArea>
   );
 }

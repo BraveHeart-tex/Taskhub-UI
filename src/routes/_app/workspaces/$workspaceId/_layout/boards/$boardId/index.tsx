@@ -26,7 +26,7 @@ export const Route = createFileRoute(
 function WorkspaceBoardPage() {
   const { board } = Route.useLoaderData();
   return (
-    <div className='flex flex-1 min-h-0 flex-col gap-4'>
+    <div className='flex flex-1 flex-col gap-4'>
       <div className='space-y-1'>
         <div className='flex items-center gap-2'>
           <H2>{board.title}</H2>
@@ -38,7 +38,9 @@ function WorkspaceBoardPage() {
 
       <Separator />
 
-      <BoardContent workspaceId={board.workspaceId} boardId={board.id} />
+      <div className='flex-1'>
+        <BoardContent workspaceId={board.workspaceId} boardId={board.id} />
+      </div>
     </div>
   );
 }
