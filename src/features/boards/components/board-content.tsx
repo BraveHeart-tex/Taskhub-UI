@@ -21,8 +21,8 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   }
 
   return (
-    <ScrollArea>
-      <div className='flex gap-4 pb-4 pt-px px-px'>
+    <ScrollArea className='w-full h-full'>
+      <div className='flex gap-4 px-px pt-px pb-6 min-w-max'>
         {data.lists.map((list) => (
           <ListColumn key={list.id} list={list} users={data.users} />
         ))}
