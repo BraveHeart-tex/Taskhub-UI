@@ -1,12 +1,14 @@
 import { ScrollArea as ScrollAreaPrimitive } from '@base-ui/react/scroll-area';
-
+import type { RefObject } from 'react';
 import { cn } from '@/lib/utils';
 
 function ScrollArea({
   className,
   children,
   ...props
-}: ScrollAreaPrimitive.Root.Props) {
+}: ScrollAreaPrimitive.Root.Props & {
+  ref?: RefObject<HTMLDivElement | null>;
+}) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot='scroll-area'

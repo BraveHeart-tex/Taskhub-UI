@@ -1,6 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
+import { type RefObject, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,6 +19,7 @@ export function ListColumn({ list, users }: ListColumnProps) {
     from: '/_app/workspaces/$workspaceId/_layout/boards/$boardId/',
   });
   const [isAddingCard, setIsAddingCard] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
     <article className='w-72 shrink-0'>
@@ -28,7 +29,7 @@ export function ListColumn({ list, users }: ListColumnProps) {
           <ListActions onAddCard={() => setIsAddingCard(true)} />
         </div>
 
-        <ScrollArea className='min-h-0 group'>
+        <ScrollArea className='min-h-0 group' ref={scrollContainerRef}>
           <div className='max-h-[calc(100vh-18.5rem)] flex-1'>
             <div className='space-y-2 p-0.5 px-1 group-data-has-overflow-y:pr-1.75 '>
               {list.cards.map((card) => (
@@ -44,6 +45,9 @@ export function ListColumn({ list, users }: ListColumnProps) {
                   listId={list.id}
                   workspaceId={params.workspaceId}
                   boardId={params.boardId}
+                  scrollContainerRef={
+                    scrollContainerRef as RefObject<HTMLDivElement>
+                  }
                 />
               )}
             </div>

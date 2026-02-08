@@ -1,6 +1,6 @@
 import { useForm, useStore } from '@tanstack/react-form';
 import { XIcon } from 'lucide-react';
-import type { FormEvent, Ref } from 'react';
+import type { FormEvent, Ref, RefObject } from 'react';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,6 +14,7 @@ interface NewCardComposerProps {
   listId: string;
   workspaceId: string;
   boardId: string;
+  scrollContainerRef: RefObject<HTMLDivElement | null>;
 }
 
 export function NewCardComposer({
@@ -22,6 +23,7 @@ export function NewCardComposer({
   listId,
   workspaceId,
   boardId,
+  scrollContainerRef,
 }: NewCardComposerProps) {
   const createCardMutation = useCreateCard();
 
@@ -66,6 +68,7 @@ export function NewCardComposer({
     },
     onCancel,
     scrollIntoView: true,
+    scrollContainerRef,
   });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {

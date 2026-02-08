@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 
 interface UseComposerPrimitiveOptions {
   /** Current field value */
@@ -18,6 +18,8 @@ interface UseComposerPrimitiveOptions {
 
   /** Scroll container into view on mount */
   scrollIntoView?: boolean;
+
+  scrollContainerRef?: RefObject<HTMLElement | null>;
 }
 
 export function useComposerPrimitive({
@@ -27,14 +29,29 @@ export function useComposerPrimitive({
   onReset,
   closeOnOutsideClick = true,
   scrollIntoView = false,
+  scrollContainerRef,
 }: UseComposerPrimitiveOptions) {
   const containerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (scrollIntoView && containerRef.current) {
-      containerRef.current.scrollIntoView({ behavior: 'instant' });
+    if (
+      !scrollContainerRef?.current ||
+      !containerRef.current ||
+      !scrollIntoView
+    )
+      return;
+
+    const container = scrollContainerRef.current;
+
+    const el = containerRef.current;
+
+    const containerRect = container.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+
+    if (elRect.bottom > containerRect.bottom) {
+      container.scrollTop += elRect.bottom - containerRect.bottom;
     }
-  }, [scrollIntoView]);
+  }, [scrollContainerRef?.current, scrollIntoView]);
 
   useEffect(() => {
     if (!closeOnOutsideClick) return;
