@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/query-keys';
+import { type UnwrapResultReturn, unwrapResult } from '@/lib/result';
 import type { Dashboard } from '../dashboard/dashboard.schema';
 import {
   createBoard,
@@ -30,7 +31,7 @@ export const useCreateBoard = () => {
 export const useUpdateBoardTitle = (
   options?: Exclude<
     UseMutationOptions<
-      Awaited<ReturnType<typeof updateBoardTitle>>,
+      UnwrapResultReturn<ReturnType<typeof updateBoardTitle>>,
       UpdateBoardTitleError,
       Parameters<typeof updateBoardTitle>[0],
       {
@@ -42,7 +43,10 @@ export const useUpdateBoardTitle = (
   >
 ) => {
   return useMutation({
-    mutationFn: updateBoardTitle,
+    mutationFn: async (variables) => {
+      const result = await updateBoardTitle(variables);
+      return unwrapResult(result);
+    },
     ...options,
   });
 };

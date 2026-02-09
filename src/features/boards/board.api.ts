@@ -190,7 +190,7 @@ export async function getBoardContent({
 
 export type UpdateBoardTitleError =
   | UnauthenticatedError
-  | { type: 'BoardMemberNotFound' }
+  | { type: 'BoardTitleAlreadyExists' }
   | UnexpectedError
   | UnauthorizedError
   | ValidationFailedError;
@@ -215,6 +215,9 @@ export async function updateBoardTitle({
     if (res.error.type === 'HttpError') {
       if (res.error.status === HttpStatus.UNAUTHORIZED) {
         return Err({ type: 'Unauthorized' });
+      }
+      if (res.error.status === HttpStatus.CONFLICT) {
+        return Err({ type: 'BoardTitleAlreadyExists' });
       }
     }
     return Err({ type: 'Unexpected' });

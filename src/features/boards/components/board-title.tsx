@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Typography } from '@/components/ui/typography';
 import type { Dashboard } from '@/features/dashboard/dashboard.schema';
 import { queryKeys } from '@/lib/query-keys';
+import { showErrorToast } from '@/shared/toast-helpers';
 import { useUpdateBoardTitle } from '../board.mutations';
 import type { BoardContext } from '../board.schema';
 
@@ -57,9 +58,12 @@ export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
 
       return { previousBoard, previousDashboard };
     },
-    onError: (_err, _boardId, ctx) => {
+    onError: (error, _boardId, ctx) => {
       queryClient.setQueryData(boardQueryKey, ctx?.previousBoard);
       queryClient.setQueryData(dashboardQueryKey, ctx?.previousDashboard);
+      if (error.type === 'BoardTitleAlreadyExists') {
+        showErrorToast('Board title already exists');
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({

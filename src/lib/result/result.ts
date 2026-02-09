@@ -1,4 +1,6 @@
 export type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+export type UnwrapResultReturn<T> =
+  T extends Promise<Result<infer U, any>> ? U : never;
 
 export const Ok = <T>(value: T): Result<T, never> => ({
   ok: true,
