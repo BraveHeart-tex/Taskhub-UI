@@ -187,3 +187,38 @@ export async function getBoardContent({
 
   return Ok(res.value);
 }
+
+export type UpdateBoardTitleError =
+  | UnauthenticatedError
+  | { type: 'BoardMemberNotFound' }
+  | UnexpectedError
+  | UnauthorizedError
+  | ValidationFailedError;
+
+export async function updateBoardTitle({
+  title,
+  boardId,
+  workspaceId,
+}: {
+  title: string;
+  boardId: string;
+  workspaceId: string;
+}): Promise<Result<void, UpdateBoardTitleError>> {
+  const res = await httpClient.patch(
+    endpoints.workspaces.boards.update({ workspaceId, boardId }),
+    {
+      title,
+    }
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+    }
+    return Err({ type: 'Unexpected' });
+  }
+
+  return Ok(undefined);
+}

@@ -1,16 +1,75 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Typography } from '@/components/ui/typography';
+import type { Dashboard } from '@/features/dashboard/dashboard.schema';
+import { queryKeys } from '@/lib/query-keys';
+import { useUpdateBoardTitle } from '../board.mutations';
+import type { BoardContext } from '../board.schema';
 
 interface BoardTitleProps {
+  boardId: string;
+  workspaceId: string;
   title: string;
-  onUpdate?: (newTitle: string) => void;
 }
 
-export function BoardTitle({ title, onUpdate }: BoardTitleProps) {
+export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const queryClient = useQueryClient();
+  const dashboardQueryKey = queryKeys.me.dashboard();
+  const boardQueryKey = queryKeys.boards.byId(boardId);
+
+  const updateBoardTitleMutation = useUpdateBoardTitle({
+    onMutate: async (variables) => {
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: boardQueryKey }),
+        queryClient.cancelQueries({ queryKey: dashboardQueryKey }),
+      ]);
+
+      const previousBoard =
+        queryClient.getQueryData<BoardContext>(boardQueryKey);
+      const previousDashboard =
+        queryClient.getQueryData<Dashboard>(dashboardQueryKey);
+
+      queryClient.setQueryData<BoardContext>(boardQueryKey, (prev) =>
+        prev
+          ? {
+              ...prev,
+              title: variables.title,
+            }
+          : undefined
+      );
+
+      queryClient.setQueryData<Dashboard>(dashboardQueryKey, (prev) =>
+        prev
+          ? {
+              ...prev,
+              boards: prev.boards.map((board) => ({
+                ...board,
+                title: board.id === boardId ? variables.title : board.title,
+              })),
+            }
+          : prev
+      );
+
+      return { previousBoard, previousDashboard };
+    },
+    onError: (_err, _boardId, ctx) => {
+      queryClient.setQueryData(boardQueryKey, ctx?.previousBoard);
+      queryClient.setQueryData(dashboardQueryKey, ctx?.previousDashboard);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: boardQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: dashboardQueryKey,
+      });
+    },
+  });
 
   useEffect(() => {
     setCurrentTitle(title);
@@ -19,7 +78,11 @@ export function BoardTitle({ title, onUpdate }: BoardTitleProps) {
   const handleBlur = () => {
     setIsEditing(false);
     if (currentTitle !== title) {
-      onUpdate?.(currentTitle);
+      updateBoardTitleMutation.mutate({
+        boardId,
+        workspaceId,
+        title: currentTitle,
+      });
     }
   };
 

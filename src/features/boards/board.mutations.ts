@@ -1,6 +1,16 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  type UseMutationOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { queryKeys } from '@/lib/query-keys';
-import { createBoard } from './board.api';
+import type { Dashboard } from '../dashboard/dashboard.schema';
+import {
+  createBoard,
+  type UpdateBoardTitleError,
+  updateBoardTitle,
+} from './board.api';
+import type { BoardContext } from './board.schema';
 
 export const useCreateBoard = () => {
   const qc = useQueryClient();
@@ -14,5 +24,25 @@ export const useCreateBoard = () => {
         });
       }
     },
+  });
+};
+
+export const useUpdateBoardTitle = (
+  options?: Exclude<
+    UseMutationOptions<
+      Awaited<ReturnType<typeof updateBoardTitle>>,
+      UpdateBoardTitleError,
+      Parameters<typeof updateBoardTitle>[0],
+      {
+        previousBoard: BoardContext | undefined;
+        previousDashboard: Dashboard | undefined;
+      }
+    >,
+    'mutationFn'
+  >
+) => {
+  return useMutation({
+    mutationFn: updateBoardTitle,
+    ...options,
   });
 };

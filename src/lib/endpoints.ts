@@ -37,6 +37,8 @@ export const endpoints = {
     boards: {
       create: (workspaceId: string) =>
         `${BASE}/api/workspaces/${workspaceId}/boards`,
+      update: ({ workspaceId, boardId }: BoardRouteParams) =>
+        `${BASE}/api/workspaces/${workspaceId}/boards/${boardId}`,
       list: (workspaceId: string) =>
         `${BASE}/api/workspaces/${workspaceId}/boards`,
       get: ({ workspaceId, boardId }: BoardRouteParams) =>
