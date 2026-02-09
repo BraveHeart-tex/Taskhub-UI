@@ -8,6 +8,7 @@ import type { BoardContent } from '@/features/boards/board.schema';
 import { CardItem } from '@/features/cards/components/card-item';
 import { NewCardComposer } from '../cards/components/new-card-composer';
 import { ListActions } from './list-actions';
+import { ListTitle } from './list-title';
 
 interface ListColumnProps {
   list: BoardContent['lists'][number];
@@ -25,9 +26,12 @@ export function ListColumn({ list, users }: ListColumnProps) {
     <article className='w-72 shrink-0'>
       <Card className='flex min-h-0 flex-col rounded-xl bg-column'>
         <div className='flex items-center justify-between px-3'>
-          <h3 className='text-sm font-semibold leading-none text-column-foreground'>
-            {list.title}
-          </h3>
+          <ListTitle
+            title={list.title}
+            workspaceId={params.workspaceId}
+            boardId={params.boardId}
+            listId={list.id}
+          />
           <ListActions onAddCard={() => setIsAddingCard(true)} />
         </div>
 

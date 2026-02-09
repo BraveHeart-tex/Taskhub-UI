@@ -16,7 +16,7 @@ interface BoardTitleProps {
 
 export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [currentTitle, setCurrentTitle] = useState(title);
+  const [newTitle, setNewTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const queryClient = useQueryClient();
@@ -76,16 +76,16 @@ export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
   });
 
   useEffect(() => {
-    setCurrentTitle(title);
+    setNewTitle(title);
   }, [title]);
 
   const handleBlur = () => {
     setIsEditing(false);
-    if (currentTitle !== title) {
+    if (newTitle !== title) {
       updateBoardTitleMutation.mutate({
         boardId,
         workspaceId,
-        title: currentTitle,
+        title: newTitle,
       });
     }
   };
@@ -95,7 +95,7 @@ export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
       inputRef.current?.blur();
     }
     if (event.key === 'Escape') {
-      setCurrentTitle(title);
+      setNewTitle(title);
       setIsEditing(false);
     }
   };
@@ -105,8 +105,8 @@ export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
       <div className='flex items-center'>
         <Input
           ref={inputRef}
-          value={currentTitle}
-          onChange={(e) => setCurrentTitle(e.target.value)}
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           autoFocus
@@ -124,7 +124,7 @@ export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
         className='select-none'
         onClick={() => setIsEditing(true)}
       >
-        {currentTitle}
+        {newTitle}
       </Typography>
     </div>
   );
