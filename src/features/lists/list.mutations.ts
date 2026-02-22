@@ -8,6 +8,8 @@ import { type UnwrapResultReturn, unwrapResult } from '@/lib/result';
 import type { BoardContent } from '../boards/board.schema';
 import {
   createList,
+  type MoveListError,
+  moveList,
   type UpdateListTitleError,
   updateListTitle,
 } from './list.api';
@@ -43,6 +45,28 @@ export function useUpdateListTitle(
   return useMutation({
     mutationFn: async (variables) => {
       const result = await updateListTitle(variables);
+      return unwrapResult(result);
+    },
+    ...options,
+  });
+}
+
+export function useMoveList(
+  options?: Exclude<
+    UseMutationOptions<
+      UnwrapResultReturn<ReturnType<typeof moveList>>,
+      MoveListError,
+      Parameters<typeof moveList>[0],
+      {
+        previousBoardContent: BoardContent | undefined;
+      }
+    >,
+    'mutationFn'
+  >
+) {
+  return useMutation({
+    mutationFn: async (variables) => {
+      const result = await moveList(variables);
       return unwrapResult(result);
     },
     ...options,

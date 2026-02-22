@@ -87,3 +87,39 @@ export async function updateListTitle({
 
   return Ok(undefined);
 }
+
+export type MoveListError =
+  | UnauthenticatedError
+  | NotFoundError
+  | UnexpectedError
+  | UnauthorizedError
+  | ValidationFailedError;
+
+export async function moveList({
+  listId,
+  afterListId,
+  beforeListId,
+}: {
+  listId: string;
+  afterListId: string;
+  beforeListId: string;
+}): Promise<Result<void, MoveListError>> {
+  const res = await httpClient.post(
+    endpoints.lists.move({
+      listId,
+    }),
+    { afterListId, beforeListId }
+  );
+
+  if (!res.ok) {
+    if (res.error.type === 'HttpError') {
+      if (res.error.status === HttpStatus.UNAUTHORIZED) {
+        return Err({ type: 'Unauthorized' });
+      }
+    }
+
+    return Err({ type: 'Unexpected' });
+  }
+
+  return Ok(undefined);
+}

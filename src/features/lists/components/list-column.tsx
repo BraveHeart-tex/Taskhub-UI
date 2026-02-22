@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { BoardContent } from '@/features/boards/board.schema';
 import { CardItem } from '@/features/cards/components/card-item';
-import { NewCardComposer } from '../cards/components/new-card-composer';
+import { NewCardComposer } from '../../cards/components/new-card-composer';
 import { ListActions } from './list-actions';
 import { ListTitle } from './list-title';
 
