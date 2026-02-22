@@ -26,11 +26,7 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
         {data.lists.map((list) => (
           <ListColumn key={list.id} list={list} users={data.users} />
         ))}
-        <NewListComposer
-          label={'Add Another List'}
-          workspaceId={workspaceId}
-          boardId={boardId}
-        />
+        <NewListComposer label={'Add Another List'} boardId={boardId} />
       </div>
       <ScrollBar orientation='horizontal' />
     </ScrollArea>

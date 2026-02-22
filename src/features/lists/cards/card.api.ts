@@ -31,17 +31,13 @@ type CreateCardError =
   | { type: 'BoardMemberNotFound' };
 
 export async function createCard({
-  workspaceId,
-  boardId,
   listId,
   title,
   description,
 }: CreateCardInput): Promise<Result<CardDto, CreateCardError>> {
   const res = await httpClient.post<CardDto>(
-    endpoints.workspaces.lists.cards.create({
-      boardId,
+    endpoints.lists.cards.create({
       listId,
-      workspaceId,
     }),
     {
       title,

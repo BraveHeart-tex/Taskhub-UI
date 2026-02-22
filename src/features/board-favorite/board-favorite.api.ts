@@ -20,7 +20,7 @@ export async function addFavoriteBoard(
   boardId: string
 ): Promise<Result<undefined, AddFavoriteBoardError>> {
   const res = await httpClient.post<void>(
-    endpoints.me.favoriteBoards.add(boardId)
+    endpoints.me.favoriteBoards.add({ boardId })
   );
 
   if (!res.ok) {
@@ -46,7 +46,7 @@ export async function removeFavoriteBoard(
   boardId: string
 ): Promise<Result<undefined, RemoveFavoriteBoardError>> {
   const res = await httpClient.delete<void>(
-    endpoints.me.favoriteBoards.remove(boardId)
+    endpoints.me.favoriteBoards.remove({ boardId })
   );
 
   if (!res.ok) {

@@ -34,7 +34,7 @@ export async function listBoardsForWorkspace(
   workspaceId: string
 ): Promise<Result<BoardPreview[], ListBoardsForWorkspaceError>> {
   const res = await httpClient.get<BoardPreview[]>(
-    endpoints.workspaces.boards.list(workspaceId)
+    endpoints.workspaces.boards.list({ workspaceId })
   );
 
   if (!res.ok) {
@@ -73,7 +73,7 @@ export async function createBoard(values: {
   title: string;
 }): Promise<Result<Board, CreateBoardError>> {
   const res = await httpClient.post<Board>(
-    endpoints.workspaces.boards.create(values.workspaceId),
+    endpoints.workspaces.boards.create({ workspaceId: values.workspaceId }),
     { title: values.title }
   );
 
@@ -116,11 +116,10 @@ type GetBoardContextError =
   | ValidationFailedError;
 
 export async function getBoardContext({
-  workspaceId,
   boardId,
 }: BoardRouteParams): Promise<Result<BoardContext, GetBoardContextError>> {
   const res = await httpClient.get<BoardContext>(
-    endpoints.workspaces.boards.get({ boardId, workspaceId })
+    endpoints.boards.get({ boardId })
   );
 
   if (!res.ok) {
@@ -156,11 +155,10 @@ type GetBoardContentError =
   | ValidationFailedError;
 
 export async function getBoardContent({
-  workspaceId,
   boardId,
 }: BoardRouteParams): Promise<Result<BoardContent, GetBoardContentError>> {
   const res = await httpClient.get<BoardContent>(
-    endpoints.workspaces.boards.content({ boardId, workspaceId })
+    endpoints.boards.content({ boardId })
   );
 
   if (!res.ok) {
@@ -198,18 +196,13 @@ export type UpdateBoardTitleError =
 export async function updateBoardTitle({
   title,
   boardId,
-  workspaceId,
 }: {
   title: string;
   boardId: string;
-  workspaceId: string;
 }): Promise<Result<void, UpdateBoardTitleError>> {
-  const res = await httpClient.patch(
-    endpoints.workspaces.boards.update({ workspaceId, boardId }),
-    {
-      title,
-    }
-  );
+  const res = await httpClient.patch(endpoints.boards.update({ boardId }), {
+    title,
+  });
 
   if (!res.ok) {
     if (res.error.type === 'HttpError') {

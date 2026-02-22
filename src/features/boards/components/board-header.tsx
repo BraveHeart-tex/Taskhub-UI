@@ -91,11 +91,7 @@ export function BoardHeader() {
     <div className='space-y-1 h-8'>
       <div className='flex items-center gap-1'>
         <div className='flex items-center'>
-          <BoardTitle
-            title={board.title}
-            boardId={board.id}
-            workspaceId={board.workspaceId}
-          />
+          <BoardTitle title={board.title} boardId={board.id} />
           <FavoriteBoardButton
             isFavorite={board.isFavorite}
             boardId={board.id}

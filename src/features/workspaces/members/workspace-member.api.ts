@@ -26,7 +26,7 @@ export async function listWorkspaceMembers(
   workspaceId: string
 ): Promise<Result<WorkspaceMember[], ListWorkspaceMembersError>> {
   const res = await httpClient.get<WorkspaceMember[]>(
-    endpoints.workspaces.members.list(workspaceId)
+    endpoints.workspaces.members.list({ workspaceId })
   );
 
   if (!res.ok) {

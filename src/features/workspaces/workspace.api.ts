@@ -86,7 +86,7 @@ export async function getWorkspace(
   workspaceId: string
 ): Promise<Result<WorkspaceContextDto, GetWorkspaceError>> {
   const res = await httpClient.get<WorkspaceContextDto>(
-    endpoints.workspaces.get(workspaceId)
+    endpoints.workspaces.get({ workspaceId })
   );
 
   if (!res.ok) {
@@ -127,7 +127,7 @@ export const getWorkspaceSummary = async (
   Result<WorkspaceSummaryWithRecentBoardsDto, GetWorkspaceSummaryError>
 > => {
   const res = await httpClient.get<WorkspaceSummaryWithRecentBoardsDto>(
-    endpoints.workspaces.summary(workspaceId)
+    endpoints.workspaces.summary({ workspaceId })
   );
 
   if (!res.ok) {

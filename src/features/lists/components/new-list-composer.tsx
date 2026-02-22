@@ -16,15 +16,10 @@ import { createListFormSchema } from '../list.schema';
 
 interface NewListComposerProps {
   label: string;
-  workspaceId: string;
   boardId: string;
 }
 
-export function NewListComposer({
-  label,
-  boardId,
-  workspaceId,
-}: NewListComposerProps) {
+export function NewListComposer({ label, boardId }: NewListComposerProps) {
   const createListMutation = useCreateList();
   const [showForm, setShowForm] = useState(false);
   const titleRef = useRef<HTMLTextAreaElement>(null);
@@ -40,7 +35,6 @@ export function NewListComposer({
       const result = await createListMutation.mutateAsync({
         title: value.title,
         boardId,
-        workspaceId,
       });
 
       if (result.ok) {

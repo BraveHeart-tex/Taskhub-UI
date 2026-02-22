@@ -22,15 +22,13 @@ type CreateListError =
 
 export async function createList({
   title,
-  workspaceId,
   boardId,
 }: {
   title: string;
-  workspaceId: string;
   boardId: string;
 }): Promise<Result<ListDto, CreateListError>> {
   const res = await httpClient.post<ListDto>(
-    endpoints.workspaces.lists.create({ workspaceId, boardId }),
+    endpoints.boards.lists.create({ boardId }),
     { title }
   );
 
@@ -67,15 +65,11 @@ export type UpdateListTitleError =
 export async function updateListTitle({
   title,
   listId,
-  boardId,
-  workspaceId,
 }: ListRouteParams & { title: string }): Promise<
   Result<void, UpdateListTitleError>
 > {
   const res = await httpClient.patch(
-    endpoints.workspaces.lists.update({
-      workspaceId,
-      boardId,
+    endpoints.lists.update({
       listId,
     }),
     { title }

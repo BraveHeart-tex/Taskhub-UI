@@ -10,11 +10,10 @@ import type { BoardContext } from '../board.schema';
 
 interface BoardTitleProps {
   boardId: string;
-  workspaceId: string;
   title: string;
 }
 
-export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
+export function BoardTitle({ boardId, title }: BoardTitleProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -84,7 +83,6 @@ export function BoardTitle({ boardId, workspaceId, title }: BoardTitleProps) {
     if (newTitle !== title) {
       updateBoardTitleMutation.mutate({
         boardId,
-        workspaceId,
         title: newTitle,
       });
     }
