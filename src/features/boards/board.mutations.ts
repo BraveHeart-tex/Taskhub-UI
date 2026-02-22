@@ -19,11 +19,15 @@ export const useCreateBoard = () => {
   return useMutation({
     mutationFn: createBoard,
     onSuccess: (result) => {
-      if (result.ok) {
-        qc.invalidateQueries({
-          queryKey: queryKeys.workspaces.boards(result.value.workspaceId),
-        });
-      }
+      if (!result.ok) return;
+
+      qc.invalidateQueries({
+        queryKey: queryKeys.workspaces.boards(result.value.workspaceId),
+      });
+
+      qc.invalidateQueries({
+        queryKey: queryKeys.me.dashboard(),
+      });
     },
   });
 };
