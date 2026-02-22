@@ -6,13 +6,13 @@ const BASE = import.meta.env.VITE_API_BASE_URL;
 
 export const endpoints = {
   me: {
-    get: `${BASE}/api/users/me`,
+    get: `${BASE}/api/me`,
     favoriteBoards: {
-      list: `${BASE}/api/users/me/favorites`,
-      add: (boardId: string) => `${BASE}/api/users/me/favorites/${boardId}`,
-      remove: (boardId: string) => `${BASE}/api/users/me/favorites/${boardId}`,
+      list: `${BASE}/api/me/favorites`,
+      add: (boardId: string) => `${BASE}/api/me/favorites/${boardId}`,
+      remove: (boardId: string) => `${BASE}/api/me/favorites/${boardId}`,
     },
-    dashboard: `${BASE}/api/users/me/dashboard`,
+    dashboard: `${BASE}/api/me/dashboard`,
   },
   auth: {
     login: `${BASE}/api/auth/login`,
