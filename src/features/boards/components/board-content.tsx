@@ -7,13 +7,17 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import {
+  arrayMove,
   horizontalListSortingStrategy,
   SortableContext,
 } from '@dnd-kit/sortable';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useMemo, useState } from 'react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Muted } from '@/components/ui/typography';
 import { NewListComposer } from '@/features/lists/components/new-list-composer';
 import { useMoveList } from '@/features/lists/list.mutations';
+import { queryKeys } from '@/lib/query-keys';
 import { useBoardContent } from '../board.queries';
 import { SortableListColumn } from './sortable-list';
 
@@ -24,26 +28,53 @@ interface BoardContentProps {
 
 export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
   const { data, isLoading } = useBoardContent({ workspaceId, boardId });
+  const [items, setItems] = useState<string[]>([]);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
-  // TODO: Handle optimistic updates and error cases here via options
-  const moveListMutation = useMoveList();
+  const queryClient = useQueryClient();
+  const moveListMutation = useMoveList({
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.boards.content(boardId),
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setItems(data.lists.map((l) => l.id));
+    }
+  }, [data]);
+
+  const listsById = useMemo(() => {
+    if (!data) return {};
+    return Object.fromEntries(data.lists.map((l) => [l.id, l]));
+  }, [data]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over || active.id === over.id || !data) return;
+    if (!over || active.id === over.id) return;
 
-    const oldIndex = data.lists.findIndex((l) => l.id === active.id);
-    const newIndex = data.lists.findIndex((l) => l.id === over.id);
+    const activeId = active.id as string;
+    const overId = over.id as string;
 
-    const prevList = data.lists[newIndex > oldIndex ? newIndex : newIndex - 1];
-    const nextList = data.lists[newIndex > oldIndex ? newIndex + 1 : newIndex];
+    const oldIndex = items.indexOf(activeId);
+    const newIndex = items.indexOf(overId);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const nextItems = arrayMove(items, oldIndex, newIndex);
+
+    const beforeListId = nextItems[newIndex - 1];
+    const afterListId = nextItems[newIndex + 1];
+
+    setItems(nextItems);
 
     moveListMutation.mutate({
-      listId: active.id as string,
-      beforeListId: prevList?.id,
-      afterListId: nextList?.id,
+      listId: activeId,
+      beforeListId,
+      afterListId,
     });
   };
 
@@ -64,16 +95,21 @@ export function BoardContent({ workspaceId, boardId }: BoardContentProps) {
       <ScrollArea className='w-full h-full'>
         <div className='flex gap-4 px-px pt-px pb-6 min-w-max'>
           <SortableContext
-            items={data.lists.map((l) => l.id)}
+            items={items}
             strategy={horizontalListSortingStrategy}
           >
-            {data.lists.map((list) => (
-              <SortableListColumn
-                key={list.id}
-                list={list}
-                users={data.users}
-              />
-            ))}
+            {items.map((listId) => {
+              const list = listsById[listId];
+              if (!list) return null;
+
+              return (
+                <SortableListColumn
+                  key={list.id}
+                  list={list}
+                  users={data.users}
+                />
+              );
+            })}
           </SortableContext>
           <NewListComposer label={'Add Another List'} boardId={boardId} />
         </div>
